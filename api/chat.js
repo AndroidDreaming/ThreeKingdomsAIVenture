@@ -40,8 +40,9 @@ export default async function handler(req, res) {
           model: selectedModel,
           messages: [{ role: 'user', content: prompt }],
           response_format: { type: "json_object" },
-          max_tokens: 2000, // 限制响应长度
-          temperature: 0.7
+          max_tokens: 4000, // 增加响应长度限制
+          temperature: 0.7,
+          stream: false // 确保不使用流式响应
         }),
         signal: controller.signal
       });

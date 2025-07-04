@@ -1058,6 +1058,14 @@
             const data = await response.json();
             console.log("API返回的原始数据:", data);
             
+            // 添加详细的调试信息
+            if (data.usage) {
+                console.log("Token使用情况:", data.usage);
+                if (data.usage.completion_tokens >= 3900) {
+                    console.warn("警告：响应接近token限制，可能被截断");
+                }
+            }
+            
             if (!data.choices || !data.choices[0] || !data.choices[0].message) {
                 throw new Error('API返回数据格式错误：缺少choices或message字段');
             }
@@ -1076,9 +1084,120 @@
                 console.log("提取的JSON内容:", contentString);
             }
 
+            // 尝试修复不完整的JSON
+            function tryFixIncompleteJson(jsonStr) {
+                // 如果JSON字符串被截断，尝试修复
+                if (!jsonStr.trim().endsWith('}')) {
+                    // 检查是否在字符串值中被截断
+                    const lastQuoteIndex = jsonStr.lastIndexOf('"');
+                    const lastCommaIndex = jsonStr.lastIndexOf(',');
+                    const lastColonIndex = jsonStr.lastIndexOf(':');
+                    
+                    if (lastColonIndex > lastCommaIndex && lastQuoteIndex < lastColonIndex) {
+                        // 可能在属性值开始处被截断，添加默认值和结束括号
+                        const truncatedKey = jsonStr.substring(jsonStr.lastIndexOf('"', lastColonIndex - 1) + 1, lastColonIndex - 1);
+                        console.log("检测到截断的属性:", truncatedKey);
+                        
+                        if (truncatedKey === 'imagePrompt') {
+                            jsonStr += ' "A mystical Chinese cultivation world scene"';
+                        } else {
+                            jsonStr += ' ""';
+                        }
+                        
+                        // 添加缺失的字段和结束括号
+                        if (!jsonStr.includes('"choices"')) {
+                            jsonStr += ', "choices": [{"text": "继续探索", "target": "continue"}]';
+                        }
+                        if (!jsonStr.includes('"gameStateUpdates"')) {
+                            jsonStr += ', "gameStateUpdates": {}';
+                        }
+                        if (!jsonStr.includes('"itemUpdates"')) {
+                            jsonStr += ', "itemUpdates": {"add": [], "remove": []}';
+                        }
+                        if (!jsonStr.includes('"unlockAchievements"')) {
+                            jsonStr += ', "unlockAchievements": []';
+                        }
+                        if (!jsonStr.includes('"logEntry"')) {
+                            jsonStr += ', "logEntry": "继续冒险..."';
+                        }
+                        
+                        jsonStr += '}';
+                    } else if (lastQuoteIndex > lastColonIndex) {
+                        // 可能在字符串值中被截断，关闭字符串和对象
+                        jsonStr += '"';
+                        
+                        // 添加缺失的字段
+                        const requiredFields = ['choices', 'gameStateUpdates', 'itemUpdates', 'unlockAchievements', 'logEntry'];
+                        for (const field of requiredFields) {
+                            if (!jsonStr.includes(`"${field}"`)) {
+                                switch (field) {
+                                    case 'choices':
+                                        jsonStr += ', "choices": [{"text": "继续探索", "target": "continue"}]';
+                                        break;
+                                    case 'gameStateUpdates':
+                                        jsonStr += ', "gameStateUpdates": {}';
+                                        break;
+                                    case 'itemUpdates':
+                                        jsonStr += ', "itemUpdates": {"add": [], "remove": []}';
+                                        break;
+                                    case 'unlockAchievements':
+                                        jsonStr += ', "unlockAchievements": []';
+                                        break;
+                                    case 'logEntry':
+                                        jsonStr += ', "logEntry": "继续冒险..."';
+                                        break;
+                                }
+                            }
+                        }
+                        
+                        jsonStr += '}';
+                    }
+                }
+                
+                return jsonStr;
+            }
+
             try {
-                const content = JSON.parse(contentString);
+                let content;
+                try {
+                    content = JSON.parse(contentString);
+                } catch (firstError) {
+                    console.log("首次JSON解析失败，尝试修复:", firstError.message);
+                    const fixedJsonString = tryFixIncompleteJson(contentString);
+                    console.log("修复后的JSON:", fixedJsonString);
+                    content = JSON.parse(fixedJsonString);
+                    console.log("修复成功！");
+                }
                 console.log("解析成功的content:", JSON.stringify(content, null, 2));
+                
+                // 验证必需字段
+                if (!content.text) {
+                    console.warn("警告：缺少text字段，使用默认值");
+                    content.text = "你继续在这个神秘的世界中探索...";
+                }
+                if (!content.imagePrompt) {
+                    console.warn("警告：缺少imagePrompt字段，使用默认值");
+                    content.imagePrompt = "A mystical Chinese cultivation world scene";
+                }
+                if (!content.choices || !Array.isArray(content.choices)) {
+                    console.warn("警告：缺少choices字段，使用默认值");
+                    content.choices = [
+                        { text: "继续探索", target: "continue" },
+                        { text: "休息片刻", target: "rest" }
+                    ];
+                }
+                if (!content.gameStateUpdates) {
+                    content.gameStateUpdates = {};
+                }
+                if (!content.itemUpdates) {
+                    content.itemUpdates = { add: [], remove: [] };
+                }
+                if (!content.unlockAchievements) {
+                    content.unlockAchievements = [];
+                }
+                if (!content.logEntry) {
+                    content.logEntry = "继续冒险...";
+                }
 
                 if (content.gameStateUpdates) {
                     const updates = content.gameStateUpdates;
@@ -1139,13 +1258,24 @@
                 console.error("JSON解析失败:", e);
                 console.error("尝试解析的内容:", contentString);
                 
-                // 如果JSON解析失败，尝试生成一个基本的响应
+                // 尝试从原始内容中提取文本信息
+                let extractedText = "抱歉，AI响应解析失败。你发现自己站在一个神秘的地方，周围云雾缭绕，似乎有无数的可能性等待着你去探索。";
+                
+                // 尝试从截断的JSON中提取text字段
+                const textMatch = contentString.match(/"text":\s*"([^"]*(?:\\.[^"]*)*)/);
+                if (textMatch && textMatch[1]) {
+                    extractedText = textMatch[1].replace(/\\"/g, '"').replace(/\\n/g, '\n');
+                    console.log("从截断的JSON中提取到文本:", extractedText);
+                }
+                
+                // 如果JSON解析失败，生成一个智能的fallback响应
                 const fallbackContent = {
-                    text: "抱歉，AI响应解析失败。你发现自己站在一个神秘的地方，周围云雾缭绕，似乎有无数的可能性等待着你去探索。",
-                    imagePrompt: "A mystical Chinese cultivation world with swirling mists and ancient mountains",
+                    text: extractedText,
+                    imagePrompt: "A mystical Chinese cultivation world with swirling mists and ancient mountains, ink wash painting style",
                     choices: [
                         { text: "🔄 重新尝试", target: "retry" },
-                        { text: "🏠 返回起点", target: "start" }
+                        { text: "🏠 返回起点", target: "start" },
+                        { text: "继续探索", target: "continue" }
                     ],
                     gameStateUpdates: {},
                     itemUpdates: { add: [], remove: [] },
