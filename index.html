@@ -684,9 +684,7 @@
             try {
                 const scene = await generateAdventure(sceneKey, playerChoiceText);
                 if (!scene) {
-                    alert('错误：AI未能生成有效场景。');
-                    showLoading(false);
-                    return;
+                    throw new Error('AI未能生成有效场景');
                 }
                 gameState.currentScene = sceneKey;
                 storyText.textContent = scene.text;
@@ -694,9 +692,20 @@
                 generateImage(scene.imagePrompt);
             } catch (error) {
                 console.error("冒险生成失败的详细错误:", error);
-                let errorMessage = error instanceof Error ? error.message : JSON.stringify(error);
-                alert(`冒险生成失败: ${errorMessage}\n请检查API设置或网络连接，并查看控制台获取详细信息。\n游戏将暂停。`);
                 showLoading(false);
+                
+                let errorMessage = error instanceof Error ? error.message : JSON.stringify(error);
+                
+                // 根据错误类型提供不同的提示
+                if (errorMessage.includes('timeout') || errorMessage.includes('TIMEOUT')) {
+                    alert(`⏰ 请求超时：AI服务响应较慢，请稍后重试。\n\n建议：\n1. 检查网络连接\n2. 稍等片刻后重新选择\n3. 如持续出现，可尝试刷新页面`);
+                } else if (errorMessage.includes('API key')) {
+                    alert(`🔑 API配置错误：请检查API密钥设置。\n\n如果使用默认后端API，请联系管理员。\n如果使用自定义API，请检查API设置。`);
+                } else if (errorMessage.includes('500') || errorMessage.includes('502') || errorMessage.includes('503')) {
+                    alert(`🔧 服务器错误：AI服务暂时不可用。\n\n建议：\n1. 稍后重试\n2. 检查API服务状态\n3. 如持续出现，请联系技术支持`);
+                } else {
+                    alert(`❌ 冒险生成失败: ${errorMessage}\n\n请检查：\n1. 网络连接是否正常\n2. API设置是否正确\n3. 查看浏览器控制台获取详细信息`);
+                }
             }
         }
 

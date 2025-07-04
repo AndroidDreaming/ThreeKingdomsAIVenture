@@ -25,28 +25,46 @@ export default async function handler(req, res) {
 
     const finalApiUrl = apiUrl.trim() + '/chat/completions';
 
-    const response = await fetch(finalApiUrl, {
-      method: 'POST',
-      headers: { 
-        'Content-Type': 'application/json', 
-        'Authorization': `Bearer ${apiKey}` 
-      },
-      body: JSON.stringify({
-        model: selectedModel,
-        messages: [{ role: 'user', content: prompt }],
-        response_format: { type: "json_object" }
-      })
-    });
+    // 创建带超时的fetch请求
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 50000); // 50秒超时
 
-    if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(`API request failed: ${response.status} ${errorText}`);
+    try {
+      const response = await fetch(finalApiUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${apiKey}`
+        },
+        body: JSON.stringify({
+          model: selectedModel,
+          messages: [{ role: 'user', content: prompt }],
+          response_format: { type: "json_object" },
+          max_tokens: 2000, // 限制响应长度
+          temperature: 0.7
+        }),
+        signal: controller.signal
+      });
+
+      clearTimeout(timeoutId);
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error(`API Error ${response.status}:`, errorText);
+        throw new Error(`API request failed: ${response.status} ${errorText}`);
+      }
+
+      const data = await response.json();
+      
+      // 返回AI响应
+      res.status(200).json(data);
+    } catch (fetchError) {
+      clearTimeout(timeoutId);
+      if (fetchError.name === 'AbortError') {
+        throw new Error('Request timeout - AI API took too long to respond');
+      }
+      throw fetchError;
     }
-
-    const data = await response.json();
-    
-    // 返回AI响应
-    res.status(200).json(data);
 
   } catch (error) {
     console.error('Chat API error:', error);
