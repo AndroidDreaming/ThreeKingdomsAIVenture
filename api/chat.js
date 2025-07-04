@@ -20,8 +20,8 @@ export default async function handler(req, res) {
       return res.status(500).json({ error: 'API key not configured' });
     }
 
-    // 使用传入的模型或默认模型
-    const selectedModel = model || defaultModel;
+    // 使用传入的模型或默认模型（空字符串也使用默认模型）
+    const selectedModel = (model && model.trim()) || defaultModel;
 
     const finalApiUrl = apiUrl.trim() + '/chat/completions';
 

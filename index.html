@@ -704,7 +704,7 @@
         async function generateAdventure(currentSceneKey, playerChoiceText) {
             // 优先使用用户自定义的API设置，如果没有则使用后端API
             let useCustomApi = localStorage.getItem('customApiUrl') && localStorage.getItem('customApiKey');
-            let model = localStorage.getItem('customModel'); // 不设置默认值，让后端决定
+            let model = localStorage.getItem('customModel') || ''; // 空字符串表示使用后端默认模型
             
             const previousSceneText = storyText.textContent;
             
