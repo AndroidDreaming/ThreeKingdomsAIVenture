@@ -316,16 +316,24 @@
         .skill-item {
             background: rgba(106, 13, 173, 0.3);
             padding: 10px;
+            margin-bottom: 10px;
             border-radius: 5px;
             border-left: 4px solid var(--mushroom-color);
         }
         
         .skill-name {
             color: var(--mushroom-color);
-            margin-bottom: 5px;
+            margin-bottom: 3px;
             display: flex;
             align-items: center;
             gap: 8px;
+            font-weight: bold;
+        }
+        
+        .skill-description {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.85rem;
+            line-height: 1.3;
         }
         
         .items-grid {
@@ -666,7 +674,18 @@
             coins: 50,
             reputation: 0,
             level: 1, // 这里 level 可以代表境界等级，例如 1-10 是练气，11-20 是筑基
-            skills: [],
+            skills: [
+                {
+                    name: "基础拳法",
+                    description: "基本武学招式，近身战斗时发挥作用",
+                    icon: "fa-solid fa-hand-fist"
+                },
+                {
+                    name: "吐纳术",
+                    description: "调息养气，缓慢恢复体力",
+                    icon: "fa-solid fa-wind"
+                }
+            ],
             items: [],
             achievements: [
                 // 基础成就
@@ -693,6 +712,10 @@
                 { id: 'slay_demon_beast', text: '斩妖除魔: 击败一头强大的妖兽', unlocked: false },
                 { id: 'master_of_spells', text: '神通自成: 领悟一项强大的神通', unlocked: false },
                 { id: 'survived_ambush', text: '死里逃生: 在一次修士的截杀中幸存下来', unlocked: false },
+                { id: 'first_skill', text: '初窥门径: 学会第一个技能', unlocked: false },
+                { id: 'skill_master', text: '技艺精湛: 掌握五种不同的技能', unlocked: false },
+                { id: 'sword_master', text: '剑道宗师: 将剑法类技能修炼到极致', unlocked: false },
+                { id: 'spell_caster', text: '法术大师: 掌握三种不同的法术', unlocked: false },
 
                 // 社交与声望
                 { id: 'high_reputation', text: '声名显赫: 在一方地域声望达到顶点', unlocked: false },
@@ -984,40 +1007,74 @@
 - **危机四伏:** 修炼之路充满艰险，包括但不限于"境界瓶颈"、"心魔入侵"、"夺宝仇杀"、"妖兽肆虐"、"宗门暗斗"、"天劫考验"。
 - **道心与阵营:** 玩家的选择将塑造其"道心"，并可能在不经意间与各大势力（如：名门正派、上古宗门、千年世家、邪魔外道、散修联盟）产生联系，影响声望和关系。
 
+**功法神通系统重要说明:**
+- **玩家已掌握的技能:** ${gameState.skills.map(skill => skill.name).join('、') || '暂无'}
+- **技能应用原则:**
+  1. 玩家已掌握的技能应该在合适的场景中自动发挥作用或提供特殊选择
+  2. 不同技能在不同情境下有不同效果（战斗、探索、社交、修炼等）
+  3. 技能等级和熟练度会影响成功率和效果
+  4. 某些高级技能可能消耗灵力或有使用限制
+- **技能获得:** 通过奇遇、传承、修炼、战斗领悟等方式获得新技能
+- **技能分类:** 攻击类（剑法、拳法、法术）、辅助类（身法、炼丹、阵法）、特殊类（神识、预知、治疗）
+
 **创作与叙事指南:**
 1.  **风格:** 保持古典仙侠文风，文字精炼，意境悠远。例："行至山穷水尽处，忽闻鹤鸣于九天之上，遥见飞瀑挂于翠壁之间，疑是仙人洞府现世。"
 2.  **奇遇与逻辑:** 剧情需符合逻辑，但要充满"奇遇感"。创造经典修仙桥段，如"坠崖不死获传承"、"坊市淘宝捡到漏"、"误入上古修士洞府"、"被卷入正魔两道纷争"等，并让这些事件对玩家产生长远影响。
 3.  **NPC互动:** 设计有血有肉的NPC，他们有自己的背景和动机，与玩家的互动可能触发隐藏任务、结为道侣或死敌。
-4.  **战斗描写:** 战斗应体现修仙特色，如"飞剑与法宝的碰撞"、"神识的交锋"、"符箓与阵法的运用"。战斗结果需通过'gameStateUpdates'明确反馈数值变化。
-5.  **有意义的选择:**
+4.  **战斗描写:** 战斗应体现修仙特色，如"飞剑与法宝的碰撞"、"神识的交锋"、"符箓与阵法的运用"。**重要：如果玩家拥有相关技能，必须在战斗中体现其作用！**
+5.  **技能联动:**
+    - 如果玩家拥有某项技能，在相关场景中应该：
+      a) 自动发挥作用（如拥有"灵眼术"时能看破幻象）
+      b) 提供特殊选择（如拥有"御剑术"时可选择"御剑飞行"）
+      c) 影响事件结果（如拥有"炼丹术"时能识别丹药品质）
+    - 技能使用可能带来额外奖励或避免危险
+6.  **有意义的选择:**
     - 提供3-4个符合当前情景、真正影响后续发展的选择。
-    - 选项应能体现不同的性格和策略（如：杀人夺宝、谨慎探索、结交盟友、暂避锋芒）。
+    - **如果玩家拥有相关技能，必须提供对应的技能选择！**
+    - 选项应能体现不同的性格和策略（如：杀人夺宝、谨慎探索、结交盟友、暂避锋芒、使用技能）。
     - 避免简单的重复，让玩家感受到选择的重量。
     - 在合适的时候，提供返回安全区（如洞府、坊市）的选项，target应设为 'safe_zone'。
 
 **严格遵守的JSON输出格式:**
 {
-  "text": "string (引人入胜、充满仙侠意境的场景/事件描述)",
+  "text": "string (引人入胜、充满仙侠意境的场景/事件描述，如果玩家使用了技能，必须详细描述技能的效果和表现)",
   "imagePrompt": "string (用于AI绘画的英文提示词，风格: 'Chinese ink wash painting, mystical, ancient cultivation world, ...')",
   "choices": [
-    { "text": "string (给玩家的选择1)", "target": "string (代表选择1的剧情分支标识)" },
+    { "text": "string (给玩家的选择1，如果玩家拥有相关技能，选择文本应体现技能名称)", "target": "string (代表选择1的剧情分支标识)" },
     { "text": "string (给玩家的选择2)", "target": "string (代表选择2的剧情分支标识)" }
   ],
   "gameStateUpdates": {
     "health": "number (生命值的增量, 可为负)",
     "coins": "number (灵石的增量)",
     "attack": "number (攻击力的增量)",
-    "reputation": "number (声望的增量)"
+    "defense": "number (防御力的增量)",
+    "agility": "number (身法的增量)",
+    "charm": "number (魅力的增量)",
+    "reputation": "number (声望的增量)",
+    "level": "number (境界等级的增量)",
+    "skills": ["string (新获得的技能名称，如：基础剑法、灵眼术、御风术等)"]
   },
   "itemUpdates": { "add": ["string (获得的物品名)"], "remove": ["string (失去的物品名)"] },
   "unlockAchievements": ["string (需要解锁的成就ID)"],
-  "logEntry": "string (对本次事件的简短总结，记入冒险日志)"
+  "logEntry": "string (对本次事件的简短总结，记入冒险日志，如果使用了技能应该提及)"
 }
 
 **当前情境:**
 - **玩家状态:** ${JSON.stringify(gameState)}
 - **上一幕剧情:** "${previousSceneText}"
 - **玩家刚刚的选择:** "${playerChoiceText}"
+
+**技能运用示例:**
+如果玩家拥有"基础拳法"，在战斗中应该这样描述："你运起基础拳法，虽然招式朴实无华，但每一拳都蕴含着扎实的功底..."
+如果玩家拥有"吐纳术"，在休息时可以提供选择："运用吐纳术调息恢复"，效果是恢复少量生命值。
+如果玩家拥有"灵眼术"，在探索时能看破幻象或发现隐藏物品。
+如果玩家拥有"御剑术"，可以提供"御剑飞行"的移动选择。
+
+**重要提醒:**
+1. 必须检查玩家当前拥有的技能，并在合适场景中让这些技能发挥作用
+2. 技能的使用应该带来明显的优势或特殊效果
+3. 不同技能在不同场景下有不同用途（战斗/探索/社交/修炼）
+4. 新技能的获得应该有合理的剧情铺垫
 
 请基于以上所有信息，生成下一幕的剧情。
 `;
@@ -1214,7 +1271,7 @@
                             if (!gameState.skills.find(s => s.name === skillName)) {
                                 gameState.skills.push({
                                     name: skillName,
-                                    description: "一个在冒险中习得的神秘技能。",
+                                    description: "冒险中习得的技能",
                                     icon: "fa-solid fa-star"
                                 });
                             }
@@ -1244,6 +1301,35 @@
                             achievement.unlocked = true;
                         }
                     });
+                }
+                
+                // 自动检查技能相关成就
+                const skillCount = gameState.skills.length;
+                if (skillCount >= 1) {
+                    const firstSkillAch = gameState.achievements.find(a => a.id === 'first_skill');
+                    if (firstSkillAch && !firstSkillAch.unlocked) {
+                        firstSkillAch.unlocked = true;
+                        console.log("解锁成就: 初窥门径");
+                    }
+                }
+                if (skillCount >= 5) {
+                    const skillMasterAch = gameState.achievements.find(a => a.id === 'skill_master');
+                    if (skillMasterAch && !skillMasterAch.unlocked) {
+                        skillMasterAch.unlocked = true;
+                        console.log("解锁成就: 技艺精湛");
+                    }
+                }
+                
+                // 检查法术类技能数量
+                const spellSkills = gameState.skills.filter(skill =>
+                    skill.name.includes('术') || skill.name.includes('法') || skill.name.includes('咒')
+                );
+                if (spellSkills.length >= 3) {
+                    const spellCasterAch = gameState.achievements.find(a => a.id === 'spell_caster');
+                    if (spellCasterAch && !spellCasterAch.unlocked) {
+                        spellCasterAch.unlocked = true;
+                        console.log("解锁成就: 法术大师");
+                    }
                 }
                 
                 if(content.logEntry && typeof content.logEntry === 'string') {
@@ -1384,7 +1470,7 @@
                 gameState.skills.forEach(skill => {
                     const skillItem = document.createElement('div');
                     skillItem.className = 'skill-item';
-                    skillItem.innerHTML = `<div class="skill-name"><i class="${skill.icon || 'fa-solid fa-star'}"></i> ${skill.name}</div><div>${skill.description}</div>`;
+                    skillItem.innerHTML = `<div class="skill-name"><i class="${skill.icon || 'fa-solid fa-star'}"></i> ${skill.name}</div><div class="skill-description">${skill.description}</div>`;
                     skillsList.appendChild(skillItem);
                 });
             }
