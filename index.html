@@ -426,6 +426,24 @@
             .game-ui { grid-template-columns: 1fr; }
             h1 { font-size: 2rem; }
             .choices-container { grid-template-columns: 1fr; }
+            
+            .game-controls {
+                flex-direction: column;
+                gap: 10px;
+                margin: 15px 0;
+                padding: 10px;
+            }
+            
+            .control-btn {
+                padding: 10px 15px;
+                font-size: 0.9rem;
+            }
+            
+            .status-bar {
+                flex-wrap: wrap;
+                gap: 10px;
+                justify-content: center;
+            }
         }
         
         .api-settings-container {
@@ -472,6 +490,65 @@
              cursor: pointer;
              font-weight: bold;
         }
+        
+        .game-controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+            padding: 15px;
+            background: rgba(13, 13, 26, 0.6);
+            border: 2px solid var(--pixel-border);
+            border-radius: 8px;
+        }
+        
+        .control-btn {
+            background: linear-gradient(145deg, #2a2a4a, #1f1f3a);
+            border: 2px solid var(--pixel-border);
+            color: var(--light-text);
+            padding: 12px 20px;
+            border-radius: 6px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Press Start 2P', 'Courier New', monospace;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .control-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+        }
+        
+        .control-btn:active {
+            transform: translateY(0);
+        }
+        
+        .reset-btn:hover {
+            border-color: var(--mushroom-color);
+            background: linear-gradient(145deg, #4a2a2a, #3a1f1f);
+        }
+        
+        .control-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255, 255, 255, 0.1),
+                transparent
+            );
+            transition: 0.5s;
+        }
+        
+        .control-btn:hover::before {
+            left: 100%;
+        }
     </style>
 </head>
 <!-- Google tag (gtag.js) -->
@@ -494,6 +571,10 @@
             <div class="status-item"><span>灵石</span><span class="status-value">50</span></div>
             <div class="status-item"><span>声望</span><span class="status-value">0</span></div>
             <div class="status-item"><span>境界</span><span class="status-value">凡人</span></div>
+        </div>
+
+        <div class="game-controls">
+            <button id="reset-game-btn" class="control-btn reset-btn">🔄 重置游戏</button>
         </div>
 
         <div class="game-ui">
@@ -554,7 +635,7 @@
 
         <div class="api-settings-container">
             <h3 class="panel-title">API 设置</h3>
-            <p style="font-size: 0.9rem; color: #888; margin-bottom: 15px;">
+            <p id="api-settings-hint" style="font-size: 0.9rem; color: #888; margin-bottom: 15px;">
                 🔒 默认使用安全的后端API，无需配置。<br>
                 如需使用自定义API，请填写以下信息（配置仅存于前端浏览器，无需担心泄露）：
             </p>
@@ -654,6 +735,125 @@
         const achievementList = document.getElementById('achievement-list');
         const adventureLogEl = document.getElementById('adventure-log');
 
+        // 保存游戏状态
+        function saveGameState() {
+            try {
+                // 保存当前的选择按钮
+                const currentChoices = [];
+                const choiceButtons = choicesContainer.querySelectorAll('.choice-btn');
+                choiceButtons.forEach(btn => {
+                    currentChoices.push({
+                        text: btn.textContent,
+                        target: btn.dataset.choice
+                    });
+                });
+
+                const saveData = {
+                    gameState: gameState,
+                    currentStoryText: storyText.textContent,
+                    currentSceneImg: sceneImg.src,
+                    currentChoices: currentChoices,
+                    saveTime: new Date().toISOString()
+                };
+                localStorage.setItem('cultivationGameSave', JSON.stringify(saveData));
+                console.log('游戏状态已保存');
+                return true;
+            } catch (error) {
+                console.error('保存游戏状态失败:', error);
+                return false;
+            }
+        }
+
+        // 加载游戏状态
+        function loadGameState() {
+            try {
+                const saveData = localStorage.getItem('cultivationGameSave');
+                if (!saveData) return false;
+                
+                const parsed = JSON.parse(saveData);
+                if (!parsed.gameState) return false;
+                
+                // 恢复游戏状态
+                Object.assign(gameState, parsed.gameState);
+                
+                // 恢复界面
+                if (parsed.currentStoryText) {
+                    storyText.textContent = parsed.currentStoryText;
+                }
+                if (parsed.currentSceneImg && parsed.currentSceneImg !== window.location.href && !parsed.currentSceneImg.includes('undefined')) {
+                    sceneImg.src = parsed.currentSceneImg;
+                    sceneImg.style.opacity = 1;
+                }
+                
+                // 恢复选择按钮
+                if (parsed.currentChoices && Array.isArray(parsed.currentChoices)) {
+                    choicesContainer.innerHTML = '';
+                    parsed.currentChoices.forEach(choice => {
+                        const button = document.createElement('button');
+                        button.className = 'choice-btn';
+                        button.dataset.choice = choice.target;
+                        button.textContent = choice.text;
+                        choicesContainer.appendChild(button);
+                    });
+                }
+                
+                updateUI();
+                console.log('游戏状态已加载，保存时间:', parsed.saveTime);
+                return true;
+            } catch (error) {
+                console.error('加载游戏状态失败:', error);
+                return false;
+            }
+        }
+
+        // 重置游戏
+        async function resetGame() {
+            if (confirm('确定要重置游戏吗？这将清除所有进度，无法恢复！')) {
+                // 清除保存的游戏状态
+                localStorage.removeItem('cultivationGameSave');
+                
+                // 重置游戏状态到初始值
+                gameState.faction = null;
+                gameState.health = 100;
+                gameState.maxHealth = 100;
+                gameState.attack = 5;
+                gameState.defense = 5;
+                gameState.agility = 5;
+                gameState.charm = 5;
+                gameState.coins = 50;
+                gameState.reputation = 0;
+                gameState.level = 1;
+                gameState.skills = [];
+                gameState.items = [];
+                gameState.achievements.forEach(ach => ach.unlocked = false);
+                gameState.adventureLog = [];
+                gameState.turn = 0;
+                gameState.currentScene = "start";
+                
+                // 重置界面到初始状态
+                storyText.textContent = '你从一个悠长的梦境中惊醒，梦里是霓虹闪烁的钢铁森林，是未曾听闻的喧嚣与繁华。但眼前，却是古朴的木屋、摇曳的烛火。窗外，月华如水，仙鹤长鸣，远方山峦在云雾中若隐若现。你意识到，你来到了一个名为"云渺大陆"的修仙世界。在这里，凡人亦可凭借机缘与毅力，感悟天地，逆天改命，踏上追寻永恒的道路。一个神秘的声音在你脑海中回响："此乃天命所归，亦是汝之抉择。选择你的起点，织就你的传奇吧。"';
+                
+                // 重置选择按钮
+                choicesContainer.innerHTML = `
+                    <button class="choice-btn" data-choice="orphan">📜 孤儿出身，身世成谜</button>
+                    <button class="choice-btn" data-choice="farmer">🌾 农家子弟，淳朴坚毅</button>
+                    <button class="choice-btn" data-choice="scholar">📚 书香门第，聪慧过人</button>
+                    <button class="choice-btn" data-choice="merchant">💰 商贾之后，精于计算</button>
+                `;
+                
+                // 重置场景图片
+                const initialImagePrompt = "A vast and mystical Chinese cultivation world, with towering mountains shrouded in mist, a majestic sword sect, a dark shadowy demonic sect, and a tranquil alchemist's pavilion, ink wash painting style";
+                try {
+                    await generateImage(initialImagePrompt);
+                } catch (error) {
+                    console.error("重置时图片加载失败:", error);
+                }
+                
+                updateUI();
+                alert('游戏已重置！');
+            }
+        }
+
         // 初始化
         document.addEventListener('DOMContentLoaded', async () => {
             apiUrlInput.value = localStorage.getItem('customApiUrl') || '';
@@ -671,9 +871,48 @@
             saveApiBtn.addEventListener('click', saveApiSettings);
             clearApiBtn.addEventListener('click', clearApiSettings);
             
-            showLoading(true); // 在初始加载时显示加载动画
-            const initialImagePrompt = "A vast and mystical Chinese cultivation world, with towering mountains shrouded in mist, a majestic sword sect, a dark shadowy demonic sect, and a tranquil alchemist's pavilion, ink wash painting style";
-            generateImage(initialImagePrompt);
+            // 游戏控制按钮事件
+            document.getElementById('reset-game-btn').addEventListener('click', resetGame);
+            
+            // 检查是否是本地文件访问
+            const isLocalFile = window.location.protocol === 'file:';
+            
+            // 更新API设置提示文本
+            const apiHint = document.getElementById('api-settings-hint');
+            if (isLocalFile) {
+                apiHint.innerHTML = '⚠️ <strong>本地文件访问模式</strong>：必须配置自定义API才能使用游戏功能。<br>请填写您的AI API信息（配置仅存于浏览器本地，安全可靠）：';
+                apiHint.style.color = '#ff6b6b';
+                // 更新占位符文本
+                apiUrlInput.placeholder = 'API URL (必填，如: https://api.openai.com/v1)';
+                apiKeyInput.placeholder = 'API Key (必填)';
+            }
+            
+            // 尝试加载保存的游戏状态
+            const hasLoadedSave = loadGameState();
+            
+            if (!hasLoadedSave) {
+                // 如果没有保存的状态，显示初始场景
+                if (!isLocalFile) {
+                    showLoading(true);
+                }
+                const initialImagePrompt = "A vast and mystical Chinese cultivation world, with towering mountains shrouded in mist, a majestic sword sect, a dark shadowy demonic sect, and a tranquil alchemist's pavilion, ink wash painting style";
+                try {
+                    await generateImage(initialImagePrompt);
+                } catch (error) {
+                    console.error("初始图片加载失败:", error);
+                }
+            } else {
+                // 如果加载了保存的状态，但没有场景图片，则生成初始图片
+                if (!sceneImg.src || sceneImg.src === window.location.href || sceneImg.src.includes('file://')) {
+                    const initialImagePrompt = "A vast and mystical Chinese cultivation world, with towering mountains shrouded in mist, a majestic sword sect, a dark shadowy demonic sect, and a tranquil alchemist's pavilion, ink wash painting style";
+                    try {
+                        await generateImage(initialImagePrompt);
+                    } catch (error) {
+                        console.error("初始图片加载失败:", error);
+                    }
+                }
+            }
+            
             updateUI();
         });
 
@@ -689,7 +928,17 @@
                 gameState.currentScene = sceneKey;
                 storyText.textContent = scene.text;
                 renderChoices(scene.choices);
-                generateImage(scene.imagePrompt);
+                
+                // 等待图片加载完成后再保存游戏进度
+                try {
+                    await generateImage(scene.imagePrompt);
+                    // 在所有DOM更新（包括图片）完成后保存游戏进度
+                    saveGameState();
+                } catch (error) {
+                    console.error("图片生成失败，但仍保存游戏进度:", error);
+                    // 即使图片加载失败，也要保存游戏进度
+                    saveGameState();
+                }
             } catch (error) {
                 console.error("冒险生成失败的详细错误:", error);
                 showLoading(false);
@@ -711,9 +960,17 @@
 
         // 使用后端API生成冒险
         async function generateAdventure(currentSceneKey, playerChoiceText) {
-            // 优先使用用户自定义的API设置，如果没有则使用后端API
-            let useCustomApi = localStorage.getItem('customApiUrl') && localStorage.getItem('customApiKey');
+            // 检查是否是本地文件访问
+            const isLocalFile = window.location.protocol === 'file:';
+            
+            // 本地文件访问时必须使用自定义API，否则优先使用后端API
+            let useCustomApi = isLocalFile || (localStorage.getItem('customApiUrl') && localStorage.getItem('customApiKey'));
             let model = localStorage.getItem('customModel') || ''; // 空字符串表示使用后端默认模型
+            
+            // 本地访问时如果没有配置自定义API，提示用户
+            if (isLocalFile && (!localStorage.getItem('customApiUrl') || !localStorage.getItem('customApiKey'))) {
+                throw new Error('本地文件访问模式需要配置自定义API。请在页面下方的"API设置"中填写您的API URL和密钥。');
+            }
             
             const previousSceneText = storyText.textContent;
             
@@ -799,13 +1056,29 @@
             }
 
             const data = await response.json();
+            console.log("API返回的原始数据:", data);
+            
+            if (!data.choices || !data.choices[0] || !data.choices[0].message) {
+                throw new Error('API返回数据格式错误：缺少choices或message字段');
+            }
+            
             let contentString = data.choices[0].message.content;
+            console.log("AI返回的原始内容:", contentString);
+            
+            if (!contentString || contentString.trim() === '') {
+                throw new Error('AI返回的内容为空');
+            }
+            
+            // 尝试提取JSON代码块
             const match = contentString.match(/```json\s*([\s\S]*?)\s*```/);
-            if (match) contentString = match[1];
+            if (match) {
+                contentString = match[1];
+                console.log("提取的JSON内容:", contentString);
+            }
 
             try {
                 const content = JSON.parse(contentString);
-                console.log("从AI收到的原始content:", JSON.stringify(content, null, 2));
+                console.log("解析成功的content:", JSON.stringify(content, null, 2));
 
                 if (content.gameStateUpdates) {
                     const updates = content.gameStateUpdates;
@@ -860,21 +1133,59 @@
                 }
 
                 updateUI();
+                
                 return content;
             } catch (e) {
-                console.error("在 generateAdventure 内部处理时发生严重错误:", e);
-                console.error("发生错误时的 gameState:", JSON.stringify(gameState, null, 2));
-                throw new Error(`处理AI响应时出错: ${e.message}`);
+                console.error("JSON解析失败:", e);
+                console.error("尝试解析的内容:", contentString);
+                
+                // 如果JSON解析失败，尝试生成一个基本的响应
+                const fallbackContent = {
+                    text: "抱歉，AI响应解析失败。你发现自己站在一个神秘的地方，周围云雾缭绕，似乎有无数的可能性等待着你去探索。",
+                    imagePrompt: "A mystical Chinese cultivation world with swirling mists and ancient mountains",
+                    choices: [
+                        { text: "🔄 重新尝试", target: "retry" },
+                        { text: "🏠 返回起点", target: "start" }
+                    ],
+                    gameStateUpdates: {},
+                    itemUpdates: { add: [], remove: [] },
+                    unlockAchievements: [],
+                    logEntry: "遇到了一些技术问题，但冒险仍在继续..."
+                };
+                
+                console.log("使用备用响应:", fallbackContent);
+                return fallbackContent;
             }
         }
 
         function generateImage(prompt) {
-             const url = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?nologo=true`;
-             const img = new Image();
-             sceneImg.style.opacity = 0.5;
-             img.onload = () => { sceneImg.src = url; sceneImg.style.opacity = 1; showLoading(false); };
-             img.onerror = () => { console.error("图片加载失败"); showLoading(false); };
-             img.src = url;
+            return new Promise((resolve, reject) => {
+                const url = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?nologo=true&width=800&height=600`;
+                const img = new Image();
+                
+                // 设置跨域属性以避免CORS问题
+                img.crossOrigin = 'anonymous';
+                sceneImg.style.opacity = 0.5;
+                
+                img.onload = () => {
+                    sceneImg.src = url;
+                    sceneImg.style.opacity = 1;
+                    showLoading(false);
+                    resolve(url);
+                };
+                
+                img.onerror = () => {
+                    console.error("图片加载失败，使用备用图片");
+                    // 使用备用图片URL
+                    const fallbackUrl = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAwIiBoZWlnaHQ9IjYwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjMWExYTJlIi8+CiAgPHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIyNCIgZmlsbD0iIzRlY2RjNCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPuS/ruS7meS4lueVjO+8muS6kea4uuS7meWcnzwvdGV4dD4KPC9zdmc+';
+                    sceneImg.src = fallbackUrl;
+                    sceneImg.style.opacity = 1;
+                    showLoading(false);
+                    resolve(fallbackUrl);
+                };
+                
+                img.src = url;
+            });
         }
         
         function renderChoices(choices) {
@@ -991,23 +1302,28 @@
             modelSelect.innerHTML = '<option value="">加载中...</option>';
             
             try {
-                // 首先获取后端配置信息
+                // 检查是否是本地文件访问
+                const isLocalFile = window.location.protocol === 'file:';
                 let defaultModelName = 'DeepSeek-R1-0528';
-                try {
-                    const configResponse = await fetch('/api/config');
-                    if (configResponse.ok) {
-                        const config = await configResponse.json();
-                        defaultModelName = config.defaultModel;
+                
+                // 只有在非本地文件访问时才尝试获取后端配置
+                if (!isLocalFile) {
+                    try {
+                        const configResponse = await fetch('/api/config');
+                        if (configResponse.ok) {
+                            const config = await configResponse.json();
+                            defaultModelName = config.defaultModel;
+                        }
+                    } catch (e) {
+                        console.log('无法获取后端配置，使用默认值');
                     }
-                } catch (e) {
-                    console.log('无法获取后端配置，使用默认值');
                 }
                 
-                // 优先使用用户自定义的API设置
-                let useCustomApi = apiUrlInput.value.trim() && apiKeyInput.value.trim();
+                // 本地文件访问时必须使用自定义API
+                let useCustomApi = isLocalFile || (apiUrlInput.value.trim() && apiKeyInput.value.trim());
                 let response;
                 
-                if (useCustomApi) {
+                if (useCustomApi && apiUrlInput.value.trim() && apiKeyInput.value.trim()) {
                     // 使用用户自定义的API设置
                     let apiUrl = apiUrlInput.value.trim();
                     let apiKey = apiKeyInput.value.trim();
@@ -1020,9 +1336,12 @@
                             'Authorization': `Bearer ${apiKey}`
                         }
                     });
-                } else {
-                    // 使用后端API
+                } else if (!isLocalFile) {
+                    // 使用后端API（仅在非本地文件访问时）
                     response = await fetch('/api/models');
+                } else {
+                    // 本地文件访问但没有配置API
+                    throw new Error('本地访问需要配置自定义API');
                 }
 
                 if (!response.ok) {
@@ -1034,8 +1353,10 @@
                     .filter(model => model.id)
                     .sort((a, b) => a.id.localeCompare(b.id));
 
-                // 添加默认选项（显示实际的默认模型名称）
-                let optionsHtml = `<option value="">使用后端默认模型 (${defaultModelName})</option>`;
+                // 添加默认选项
+                let optionsHtml = isLocalFile ?
+                    '<option value="">请选择模型</option>' :
+                    `<option value="">使用后端默认模型 (${defaultModelName})</option>`;
                 optionsHtml += models
                     .map(model => `<option value="${model.id}">${model.id}</option>`)
                     .join('');
@@ -1048,7 +1369,12 @@
                 }
             } catch (error) {
                 console.error('获取模型列表失败:', error);
-                modelSelect.innerHTML = `<option value="">使用后端默认模型 (${defaultModelName})</option><option value="DeepSeek-R1-0528">DeepSeek-R1-0528</option>`;
+                const isLocalFile = window.location.protocol === 'file:';
+                if (isLocalFile) {
+                    modelSelect.innerHTML = '<option value="">请先配置API设置</option><option value="DeepSeek-R1-0528">DeepSeek-R1-0528</option>';
+                } else {
+                    modelSelect.innerHTML = `<option value="">使用后端默认模型 (${defaultModelName})</option><option value="DeepSeek-R1-0528">DeepSeek-R1-0528</option>`;
+                }
             }
         }
 
