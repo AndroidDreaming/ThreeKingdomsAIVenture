@@ -555,7 +555,8 @@
         <div class="api-settings-container">
             <h3 class="panel-title">API 设置</h3>
             <p style="font-size: 0.9rem; color: #888; margin-bottom: 15px;">
-                🔒 默认使用安全的后端API，无需配置。如需使用自定义API，请填写以下信息：
+                🔒 默认使用安全的后端API，无需配置。<br>
+                如需使用自定义API，请填写以下信息（配置仅存于前端浏览器，无需担心泄露）：
             </p>
             <div class="api-settings">
                 <input type="text" id="api-url-input" placeholder="自定义API URL (可选)">
@@ -703,7 +704,7 @@
         async function generateAdventure(currentSceneKey, playerChoiceText) {
             // 优先使用用户自定义的API设置，如果没有则使用后端API
             let useCustomApi = localStorage.getItem('customApiUrl') && localStorage.getItem('customApiKey');
-            let model = localStorage.getItem('customModel') || 'DeepSeek-R1-0528';
+            let model = localStorage.getItem('customModel'); // 不设置默认值，让后端决定
             
             const previousSceneText = storyText.textContent;
             
@@ -981,6 +982,18 @@
             modelSelect.innerHTML = '<option value="">加载中...</option>';
             
             try {
+                // 首先获取后端配置信息
+                let defaultModelName = 'DeepSeek-R1-0528';
+                try {
+                    const configResponse = await fetch('/api/config');
+                    if (configResponse.ok) {
+                        const config = await configResponse.json();
+                        defaultModelName = config.defaultModel;
+                    }
+                } catch (e) {
+                    console.log('无法获取后端配置，使用默认值');
+                }
+                
                 // 优先使用用户自定义的API设置
                 let useCustomApi = apiUrlInput.value.trim() && apiKeyInput.value.trim();
                 let response;
@@ -1012,17 +1025,21 @@
                     .filter(model => model.id)
                     .sort((a, b) => a.id.localeCompare(b.id));
 
-                modelSelect.innerHTML = models
+                // 添加默认选项（显示实际的默认模型名称）
+                let optionsHtml = `<option value="">使用后端默认模型 (${defaultModelName})</option>`;
+                optionsHtml += models
                     .map(model => `<option value="${model.id}">${model.id}</option>`)
                     .join('');
                 
+                modelSelect.innerHTML = optionsHtml;
+                
                 const savedModel = localStorage.getItem('customModel');
-                if (savedModel && models.some(m => m.id === savedModel)) {
+                if (savedModel !== null && (savedModel === '' || models.some(m => m.id === savedModel))) {
                     modelSelect.value = savedModel;
                 }
             } catch (error) {
                 console.error('获取模型列表失败:', error);
-                modelSelect.innerHTML = '<option value="DeepSeek-R1-0528">DeepSeek-R1-0528</option>';
+                modelSelect.innerHTML = `<option value="">使用后端默认模型 (${defaultModelName})</option><option value="DeepSeek-R1-0528">DeepSeek-R1-0528</option>`;
             }
         }
 
