@@ -554,10 +554,13 @@
 
         <div class="api-settings-container">
             <h3 class="panel-title">API 设置</h3>
+            <p style="font-size: 0.9rem; color: #888; margin-bottom: 15px;">
+                🔒 默认使用安全的后端API，无需配置。如需使用自定义API，请填写以下信息：
+            </p>
             <div class="api-settings">
-                <input type="text" id="api-url-input" placeholder="API URL (例如: https://.../v1)">
+                <input type="text" id="api-url-input" placeholder="自定义API URL (可选)">
                 <select id="model-input" class="api-settings-select"></select>
-                <input type="password" id="api-key-input" placeholder="API Key">
+                <input type="password" id="api-key-input" placeholder="自定义API Key (可选)">
                 <button id="save-api-btn">保存</button>
                 <button id="clear-api-btn">清除</button>
             </div>
@@ -696,19 +699,11 @@
             }
         }
 
-        // 使用API生成冒险
+        // 使用后端API生成冒险
         async function generateAdventure(currentSceneKey, playerChoiceText) {
-            let apiUrl = localStorage.getItem('customApiUrl');
-            let apiKey = localStorage.getItem('customApiKey');
-            let model = localStorage.getItem('customModel');
-
-            if (!apiUrl) {
-                apiUrl = 'https://chatapi.akash.network/api/v1';
-                apiKey = 'sk-SAHbo-76o1JIV2aYsZJHaQ';
-                model = 'DeepSeek-R1-0528';
-            } else if (!model) {
-                model = 'DeepSeek-R1-0528';
-            }
+            // 优先使用用户自定义的API设置，如果没有则使用后端API
+            let useCustomApi = localStorage.getItem('customApiUrl') && localStorage.getItem('customApiKey');
+            let model = localStorage.getItem('customModel') || 'DeepSeek-R1-0528';
             
             const previousSceneText = storyText.textContent;
             
@@ -718,15 +713,15 @@
 **世界观核心设定:**
 - **境界体系:** [凡人 -> 练气 -> 筑基 -> 金丹 -> 元婴 -> 化神...]，境界是衡量实力的核心标准，突破需要机缘和积累。
 - **灵根资质:** 玩家拥有隐藏的灵根属性（如金、木、水、火、土、冰、雷、变异等），可能会在特定事件中被发现或觉醒，影响功法修炼速度和威力。
-- **资源与货币:** 主要货币是“灵石”。丹药、法宝、功法、符箓、阵盘等是重要资源，均有品阶之分（如：劣品、凡品、精品、极品、灵品、仙品）。
-- **危机四伏:** 修炼之路充满艰险，包括但不限于“境界瓶颈”、“心魔入侵”、“夺宝仇杀”、“妖兽肆虐”、“宗门暗斗”、“天劫考验”。
-- **道心与阵营:** 玩家的选择将塑造其“道心”，并可能在不经意间与各大势力（如：名门正派、上古宗门、千年世家、邪魔外道、散修联盟）产生联系，影响声望和关系。
+- **资源与货币:** 主要货币是"灵石"。丹药、法宝、功法、符箓、阵盘等是重要资源，均有品阶之分（如：劣品、凡品、精品、极品、灵品、仙品）。
+- **危机四伏:** 修炼之路充满艰险，包括但不限于"境界瓶颈"、"心魔入侵"、"夺宝仇杀"、"妖兽肆虐"、"宗门暗斗"、"天劫考验"。
+- **道心与阵营:** 玩家的选择将塑造其"道心"，并可能在不经意间与各大势力（如：名门正派、上古宗门、千年世家、邪魔外道、散修联盟）产生联系，影响声望和关系。
 
 **创作与叙事指南:**
-1.  **风格:** 保持古典仙侠文风，文字精炼，意境悠远。例：“行至山穷水尽处，忽闻鹤鸣于九天之上，遥见飞瀑挂于翠壁之间，疑是仙人洞府现世。”
-2.  **奇遇与逻辑:** 剧情需符合逻辑，但要充满“奇遇感”。创造经典修仙桥段，如“坠崖不死获传承”、“坊市淘宝捡到漏”、“误入上古修士洞府”、“被卷入正魔两道纷争”等，并让这些事件对玩家产生长远影响。
+1.  **风格:** 保持古典仙侠文风，文字精炼，意境悠远。例："行至山穷水尽处，忽闻鹤鸣于九天之上，遥见飞瀑挂于翠壁之间，疑是仙人洞府现世。"
+2.  **奇遇与逻辑:** 剧情需符合逻辑，但要充满"奇遇感"。创造经典修仙桥段，如"坠崖不死获传承"、"坊市淘宝捡到漏"、"误入上古修士洞府"、"被卷入正魔两道纷争"等，并让这些事件对玩家产生长远影响。
 3.  **NPC互动:** 设计有血有肉的NPC，他们有自己的背景和动机，与玩家的互动可能触发隐藏任务、结为道侣或死敌。
-4.  **战斗描写:** 战斗应体现修仙特色，如“飞剑与法宝的碰撞”、“神识的交锋”、“符箓与阵法的运用”。战斗结果需通过'gameStateUpdates'明确反馈数值变化。
+4.  **战斗描写:** 战斗应体现修仙特色，如"飞剑与法宝的碰撞"、"神识的交锋"、"符箓与阵法的运用"。战斗结果需通过'gameStateUpdates'明确反馈数值变化。
 5.  **有意义的选择:**
     - 提供3-4个符合当前情景、真正影响后续发展的选择。
     - 选项应能体现不同的性格和策略（如：杀人夺宝、谨慎探索、结交盟友、暂避锋芒）。
@@ -760,17 +755,34 @@
 请基于以上所有信息，生成下一幕的剧情。
 `;
 
-            const finalApiUrl = apiUrl.trim() + '/chat/completions';
+            let response;
+            
+            if (useCustomApi) {
+                // 使用用户自定义的API设置
+                const apiUrl = localStorage.getItem('customApiUrl');
+                const apiKey = localStorage.getItem('customApiKey');
+                const finalApiUrl = apiUrl.trim() + '/chat/completions';
 
-            const response = await fetch(finalApiUrl, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
-                body: JSON.stringify({
-                    model: model,
-                    messages: [{ role: 'user', content: prompt }],
-                    response_format: { type: "json_object" }
-                })
-            });
+                response = await fetch(finalApiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
+                    body: JSON.stringify({
+                        model: model,
+                        messages: [{ role: 'user', content: prompt }],
+                        response_format: { type: "json_object" }
+                    })
+                });
+            } else {
+                // 使用后端API（安全）
+                response = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        prompt: prompt,
+                        model: model
+                    })
+                });
+            }
 
             if (!response.ok) {
                 throw new Error(`API 请求失败: ${response.status} ${await response.text()}`);
@@ -969,17 +981,27 @@
             modelSelect.innerHTML = '<option value="">加载中...</option>';
             
             try {
-                let apiUrl = apiUrlInput.value.trim() || 'https://chatapi.akash.network/api/v1';
-                let apiKey = apiKeyInput.value.trim() || 'sk-SAHbo-76o1JIV2aYsZJHaQ';
+                // 优先使用用户自定义的API设置
+                let useCustomApi = apiUrlInput.value.trim() && apiKeyInput.value.trim();
+                let response;
+                
+                if (useCustomApi) {
+                    // 使用用户自定义的API设置
+                    let apiUrl = apiUrlInput.value.trim();
+                    let apiKey = apiKeyInput.value.trim();
 
-                if (apiUrl.endsWith('/')) apiUrl = apiUrl.slice(0, -1);
-                const modelsUrl = `${apiUrl}/models`;
+                    if (apiUrl.endsWith('/')) apiUrl = apiUrl.slice(0, -1);
+                    const modelsUrl = `${apiUrl}/models`;
 
-                const response = await fetch(modelsUrl, {
-                    headers: {
-                        'Authorization': `Bearer ${apiKey}`
-                    }
-                });
+                    response = await fetch(modelsUrl, {
+                        headers: {
+                            'Authorization': `Bearer ${apiKey}`
+                        }
+                    });
+                } else {
+                    // 使用后端API
+                    response = await fetch('/api/models');
+                }
 
                 if (!response.ok) {
                     throw new Error(`获取模型列表失败: ${response.status}`);
