@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>图片生成API测试</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #1a1a2e;
+            color: #f7f9f9;
+        }
+        .container {
+            background: rgba(13, 13, 26, 0.8);
+            border: 2px solid #4ecdc4;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        input, button {
+            padding: 10px;
+            margin: 5px;
+            border: 1px solid #4ecdc4;
+            border-radius: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #f7f9f9;
+        }
+        button {
+            background: #4ecdc4;
+            color: #1a1a2e;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        button:hover {
+            background: #3ab8b0;
+        }
+        #result {
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #4ecdc4;
+            border-radius: 4px;
+            background: rgba(0, 0, 0, 0.3);
+        }
+        #generated-image {
+            max-width: 100%;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+        .loading.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🖼️ 图片生成API测试</h1>
+        <p>测试新的图片生成API端点</p>
+        
+        <div>
+            <input type="text" id="prompt-input" placeholder="输入图片描述..." style="width: 60%;" value="A beautiful Chinese landscape with mountains and rivers, traditional ink painting style">
+            <button onclick="testImageGeneration()">生成图片</button>
+        </div>
+        
+        <div>
+            <label>宽度: <input type="number" id="width-input" value="800" style="width: 80px;"></label>
+            <label>高度: <input type="number" id="height-input" value="600" style="width: 80px;"></label>
+            <label>模型: 
+                <select id="model-input" style="background: rgba(255, 255, 255, 0.1); color: #f7f9f9; border: 1px solid #4ecdc4;">
+                    <option value="flux">Flux</option>
+                    <option value="turbo">Turbo</option>
+                    <option value="gptimage">GPT Image</option>
+                </select>
+            </label>
+        </div>
+        
+        <div>
+            <label><input type="checkbox" id="nologo-input" checked> 无Logo</label>
+            <label><input type="checkbox" id="enhance-input"> 增强提示词</label>
+            <label><input type="checkbox" id="safe-input"> 安全模式</label>
+        </div>
+    </div>
+
+    <div class="loading" id="loading">
+        <p>🎨 正在生成图片，请稍候...</p>
+    </div>
+
+    <div id="result" style="display: none;">
+        <h3>生成结果:</h3>
+        <div id="result-info"></div>
+        <img id="generated-image" alt="生成的图片">
+    </div>
+
+    <script>
+        async function testImageGeneration() {
+            const prompt = document.getElementById('prompt-input').value.trim();
+            if (!prompt) {
+                alert('请输入图片描述');
+                return;
+            }
+
+            const width = parseInt(document.getElementById('width-input').value) || 800;
+            const height = parseInt(document.getElementById('height-input').value) || 600;
+            const model = document.getElementById('model-input').value;
+            const nologo = document.getElementById('nologo-input').checked;
+            const enhance = document.getElementById('enhance-input').checked;
+            const safe = document.getElementById('safe-input').checked;
+
+            const loading = document.getElementById('loading');
+            const result = document.getElementById('result');
+            const resultInfo = document.getElementById('result-info');
+            const generatedImage = document.getElementById('generated-image');
+
+            // 显示加载状态
+            loading.classList.add('active');
+            result.style.display = 'none';
+
+            try {
+                console.log('发送图片生成请求:', { prompt, width, height, model, nologo, enhance, safe });
+
+                const response = await fetch('/api/image', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        prompt,
+                        width,
+                        height,
+                        model,
+                        nologo,
+                        enhance,
+                        safe
+                    })
+                });
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    throw new Error(`API请求失败: ${response.status} - ${errorText}`);
+                }
+
+                const data = await response.json();
+                console.log('API响应:', data);
+
+                if (data.success && data.imageUrl) {
+                    // 显示结果
+                    resultInfo.innerHTML = `
+                        <p><strong>提示词:</strong> ${data.prompt}</p>
+                        <p><strong>模型:</strong> ${data.model}</p>
+                        <p><strong>尺寸:</strong> ${data.parameters.width} x ${data.parameters.height}</p>
+                        <p><strong>图片URL:</strong> <a href="${data.imageUrl}" target="_blank" style="color: #4ecdc4;">${data.imageUrl}</a></p>
+                    `;
+                    
+                    generatedImage.src = data.imageUrl;
+                    generatedImage.onload = () => {
+                        loading.classList.remove('active');
+                        result.style.display = 'block';
+                    };
+                    
+                    generatedImage.onerror = () => {
+                        loading.classList.remove('active');
+                        resultInfo.innerHTML += '<p style="color: #ff6b6b;"><strong>错误:</strong> 图片加载失败</p>';
+                        result.style.display = 'block';
+                    };
+                } else {
+                    throw new Error('API返回了无效的响应');
+                }
+
+            } catch (error) {
+                console.error('图片生成失败:', error);
+                loading.classList.remove('active');
+                resultInfo.innerHTML = `<p style="color: #ff6b6b;"><strong>错误:</strong> ${error.message}</p>`;
+                result.style.display = 'block';
+            }
+        }
+
+        // 回车键触发生成
+        document.getElementById('prompt-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                testImageGeneration();
+            }
+        });
+    </script>
+</body>
+</html>

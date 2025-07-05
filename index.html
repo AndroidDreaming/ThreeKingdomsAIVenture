@@ -1374,33 +1374,79 @@
             }
         }
 
-        function generateImage(prompt) {
-            return new Promise((resolve, reject) => {
-                const url = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?nologo=true&width=800&height=600`;
-                const img = new Image();
-                
-                // 设置跨域属性以避免CORS问题
-                img.crossOrigin = 'anonymous';
-                sceneImg.style.opacity = 0.5;
-                
-                img.onload = () => {
-                    sceneImg.src = url;
-                    sceneImg.style.opacity = 1;
-                    showLoading(false);
-                    resolve(url);
-                };
-                
-                img.onerror = () => {
-                    console.error("图片加载失败，使用备用图片");
-                    // 使用备用图片URL
+        async function generateImage(prompt) {
+            return new Promise(async (resolve, reject) => {
+                try {
+                    sceneImg.style.opacity = 0.5;
+                    
+                    // 检查是否是本地文件访问
+                    const isLocalFile = window.location.protocol === 'file:';
+                    let imageUrl;
+                    
+                    if (isLocalFile) {
+                        // 本地文件访问时直接使用pollinations API
+                        imageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?nologo=true&width=800&height=600&model=flux`;
+                    } else {
+                        // 通过后端API生成图片
+                        const response = await fetch('/api/image', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                prompt: prompt,
+                                width: 800,
+                                height: 600,
+                                nologo: true,
+                                model: 'flux'
+                            })
+                        });
+                        
+                        if (!response.ok) {
+                            throw new Error(`图片生成API请求失败: ${response.status}`);
+                        }
+                        
+                        const data = await response.json();
+                        if (!data.success || !data.imageUrl) {
+                            throw new Error('图片生成失败');
+                        }
+                        
+                        imageUrl = data.imageUrl;
+                        console.log('图片生成成功:', data);
+                    }
+                    
+                    // 预加载图片
+                    const img = new Image();
+                    img.crossOrigin = 'anonymous';
+                    
+                    img.onload = () => {
+                        sceneImg.src = imageUrl;
+                        sceneImg.style.opacity = 1;
+                        showLoading(false);
+                        resolve(imageUrl);
+                    };
+                    
+                    img.onerror = () => {
+                        console.error("图片加载失败，使用备用图片");
+                        // 使用备用图片URL
+                        const fallbackUrl = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAwIiBoZWlnaHQ9IjYwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjMWExYTJlIi8+CiAgPHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIyNCIgZmlsbD0iIzRlY2RjNCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPuS/ruS7meS4lueVjO+8muS6kea4uuS7meWcnzwvdGV4dD4KPC9zdmc+';
+                        sceneImg.src = fallbackUrl;
+                        sceneImg.style.opacity = 1;
+                        showLoading(false);
+                        resolve(fallbackUrl);
+                    };
+                    
+                    img.src = imageUrl;
+                    
+                } catch (error) {
+                    console.error('图片生成错误:', error);
+                    // 使用备用图片
                     const fallbackUrl = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAwIiBoZWlnaHQ9IjYwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjMWExYTJlIi8+CiAgPHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIyNCIgZmlsbD0iIzRlY2RjNCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPuS/ruS7meS4lueVjO+8muS6kea4uuS7meWcnzwvdGV4dD4KPC9zdmc+';
                     sceneImg.src = fallbackUrl;
                     sceneImg.style.opacity = 1;
                     showLoading(false);
                     resolve(fallbackUrl);
-                };
-                
-                img.src = url;
+                }
             });
         }
         
