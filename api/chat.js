@@ -25,6 +25,10 @@ export default async function handler(req, res) {
 
     const finalApiUrl = apiUrl.trim() + '/chat/completions';
 
+    if(apiUrl.includes('pollinations.ai')){
+      finalApiUrl = apiUrl.trim()
+    }
+
     // 创建带超时的fetch请求
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 50000); // 50秒超时
