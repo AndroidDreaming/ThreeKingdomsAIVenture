@@ -23,10 +23,10 @@ export default async function handler(req, res) {
     // 使用传入的模型或默认模型（空字符串也使用默认模型）
     const selectedModel = (model && model.trim()) || defaultModel;
 
-    const finalApiUrl = apiUrl.trim() + '/chat/completions';
+    let finalApiUrl = apiUrl.trim() + '/chat/completions';
 
     if(apiUrl.includes('pollinations.ai')){
-      finalApiUrl = apiUrl.trim()
+      finalApiUrl = apiUrl.trim();
     }
 
     // 创建带超时的fetch请求
@@ -34,20 +34,54 @@ export default async function handler(req, res) {
     const timeoutId = setTimeout(() => controller.abort(), 50000); // 50秒超时
 
     try {
-      const response = await fetch(finalApiUrl, {
-        method: 'POST',
-        headers: {
+      // 根据不同的API提供商构建请求
+      let requestBody, headers;
+      
+      if (apiUrl.includes('pollinations.ai')) {
+        // Pollinations.ai 格式
+        headers = {
+          'Content-Type': 'application/json'
+        };
+        
+        // 如果有 API key，添加 Authorization header
+        if (apiKey && apiKey !== 'not-required') {
+          headers['Authorization'] = `Bearer ${apiKey}`;
+        }
+        
+        // 构建消息，添加强制 JSON 输出的系统提示
+        const messages = [
+          {
+            role: 'system',
+            content: 'You must respond with valid JSON format only. Do not include any text outside the JSON structure.'
+          },
+          { role: 'user', content: prompt }
+        ];
+        
+        requestBody = {
+          model: selectedModel || 'openai',
+          messages: messages,
+          seed: Math.floor(Math.random() * 1000)
+        };
+      } else {
+        // 标准 OpenAI 格式
+        headers = {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${apiKey}`
-        },
-        body: JSON.stringify({
+        };
+        requestBody = {
           model: selectedModel,
           messages: [{ role: 'user', content: prompt }],
           response_format: { type: "json_object" },
-          max_tokens: 4000, // 增加响应长度限制
+          max_tokens: 4000,
           temperature: 0.7,
-          stream: false // 确保不使用流式响应
-        }),
+          stream: false
+        };
+      }
+
+      const response = await fetch(finalApiUrl, {
+        method: 'POST',
+        headers: headers,
+        body: JSON.stringify(requestBody),
         signal: controller.signal
       });
 

@@ -41,7 +41,47 @@ curl -X POST "https://chatapi.akash.network/api/v1/chat/completions" \
   }'
 ```
 
-#### D. 重新部署
+#### D. Pollinations.ai 配置
+如果使用 Pollinations.ai，请使用以下配置：
+
+**匿名访问（有速率限制）：**
+```bash
+AI_API_URL=https://text.pollinations.ai/openai
+AI_API_KEY=not-required
+AI_DEFAULT_MODEL=openai  # 或 mistral, claude
+```
+
+**认证访问（更高速率限制）：**
+```bash
+AI_API_URL=https://text.pollinations.ai/openai
+AI_API_KEY=your-pollinations-token  # 从 https://auth.pollinations.ai 获取
+AI_DEFAULT_MODEL=openai
+```
+
+测试 Pollinations.ai API（匿名）：
+```bash
+curl https://text.pollinations.ai/openai \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "openai",
+    "messages": [{"role": "user", "content": "Hello"}],
+    "seed": 42
+  }'
+```
+
+测试 Pollinations.ai API（认证）：
+```bash
+curl https://text.pollinations.ai/openai \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer your-pollinations-token" \
+  -d '{
+    "model": "openai",
+    "messages": [{"role": "user", "content": "Hello"}],
+    "seed": 42
+  }'
+```
+
+#### E. 重新部署
 1. 在 Vercel Dashboard 中进入项目
 2. 点击 "Deployments" 标签
 3. 点击最新部署右侧的三个点

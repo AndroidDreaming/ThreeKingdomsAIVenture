@@ -9,6 +9,33 @@ export default async function handler(req, res) {
     const apiUrl = process.env.AI_API_URL || 'https://chatapi.akash.network/api/v1';
     const apiKey = process.env.AI_API_KEY;
 
+    // 如果是 Pollinations.ai，返回预定义的模型列表
+    if (apiUrl.includes('pollinations.ai')) {
+      const pollinationsModels = {
+        data: [
+          {
+            id: 'openai',
+            object: 'model',
+            created: Date.now(),
+            owned_by: 'pollinations'
+          },
+          {
+            id: 'mistral',
+            object: 'model',
+            created: Date.now(),
+            owned_by: 'pollinations'
+          },
+          {
+            id: 'claude',
+            object: 'model',
+            created: Date.now(),
+            owned_by: 'pollinations'
+          }
+        ]
+      };
+      return res.status(200).json(pollinationsModels);
+    }
+
     if (!apiKey) {
       return res.status(500).json({ error: 'API key not configured' });
     }
