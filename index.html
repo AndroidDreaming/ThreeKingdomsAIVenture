@@ -798,6 +798,21 @@
                 
                 // 恢复游戏状态
                 Object.assign(gameState, parsed.gameState);
+
+                // 在加载时检查游戏是否结束
+                if (gameState.health <= 0) {
+                    updateUI();
+                    storyText.textContent = "你倒在血泊之中，意识逐渐模糊... 你的冒险已在此终结。";
+                    choicesContainer.innerHTML = '';
+                    const restartBtn = document.createElement('button');
+                    restartBtn.className = 'choice-btn';
+                    restartBtn.textContent = '🔄 重新开始';
+                    restartBtn.onclick = resetGame;
+                    choicesContainer.appendChild(restartBtn);
+                    choicesContainer.style.gridTemplateColumns = '1fr';
+                    console.log('加载到游戏结束状态');
+                    return true;
+                }
                 
                 // 恢复界面
                 if (parsed.currentStoryText) {
@@ -948,6 +963,23 @@
                 if (!scene) {
                     throw new Error('AI未能生成有效场景');
                 }
+
+                // 在状态更新后检查游戏是否结束
+                if (gameState.health <= 0) {
+                    updateUI(); // 最后一次更新UI以显示0 HP
+                    storyText.textContent = scene.text + "\n\n你的气息逐渐微弱，眼前一黑，意识沉入了无尽的黑暗... 你的冒险结束了。";
+                    choicesContainer.innerHTML = '';
+                    const restartBtn = document.createElement('button');
+                    restartBtn.className = 'choice-btn';
+                    restartBtn.textContent = '🔄 重新开始';
+                    restartBtn.onclick = resetGame;
+                    choicesContainer.appendChild(restartBtn);
+                    choicesContainer.style.gridTemplateColumns = '1fr';
+                    showLoading(false);
+                    saveGameState(); // 保存游戏结束的状态
+                    return;
+                }
+
                 gameState.currentScene = sceneKey;
                 storyText.textContent = scene.text;
                 renderChoices(scene.choices);
@@ -999,20 +1031,27 @@
             
             const prompt = `你是一位顶级的修仙世界叙事大师，负责动态生成一个连贯、有趣且节奏合理的修仙故事。
 
+**循环打破机制 (LOOP BREAKER) - 最高优先级规则:**
+1.  **分析日志:** 查看最新的5条冒险日志。
+2.  **识别循环:** 如果日志反复描述同一事件（例如：与同一个敌人战斗、在同一个地方探索），则必须打破循环。
+3.  **强制结束:** 在当前回合，必须结束这个循环事件。
+    *   **战斗循环:** 敌人必须被击败、逃跑、或被意外事件终结。
+    *   **探索循环:** 必须有重大发现、或找到出口、或遇到无法绕过的障碍。
+4.  **提供新选择:** 提供的选择必须是事件结束后的行动（如“搜刮战利品”、“离开此地”），绝对不能是继续循环的选项（如“继续攻击”）。
+
 **核心原则:**
 1.  **事件驱动叙事:** 专注于描述具体发生的事件、人物对话和环境变化。
-2.  **自然整合:** 将玩家的技能(${gameState.skills.map(s => s.name).join('、') || '无'})和物品自然地融入事件描述和选择中。
-3.  **结尾即悬念:** 剧情必须在事件的关键转折点或高潮时停止，引发玩家的好奇心。
+2.  **剧情深度优先:** 优先深化当前事件和已有角色关系，而不是轻易引入新角色。
+3.  **自然整合:** 将玩家的技能(${gameState.skills.map(s => s.name).join('、') || '无'})和物品自然地融入事件描述和选择中。
+4.  **结尾即悬念:** 剧情必须在事件的关键转折点或高潮时停止。
 
-**剧情节奏控制 (重要):**
-1.  **感知回合:** 当前是游戏第 ${gameState.turn} 回合。你要意识到时间的流逝。
-2.  **避免拖沓:** 一个核心事件（如一场战斗、一次探索）不应持续超过10个回合。如果当前事件（比如与妖兽战斗）已经持续了很长时间，请主动设计剧情的转折或结局，比如妖兽逃跑、第三方介入、或者提供明确的脱离战斗的选择。
-3.  **推动主线:** 始终考虑如何让故事向前发展。如果玩家长时间在一个区域徘徊，应引入新的事件或线索，引导他们前往新的地点或开启新的任务。
+**剧情节奏控制:**
+1.  **感知回合:** 当前是游戏第 ${gameState.turn} 回合。
+2.  **避免拖沓:** 一个核心事件不应持续超过10个回合。
 
 **绝对禁止:**
-1.  任何形式的引导性结尾（如："你该怎么办？" / "是...还是..."）。
-2.  总结性或说教性语句（如："这是一个艰难的决定" / "你的选择将影响未来"）。
-3.  直接询问玩家（如："你想要做什么？"）。
+1.  任何形式的引导性结尾（如："你该怎么办？"）。
+2.  总结性或说教性语句（如："这是一个艰难的决定"）。
 
 **玩家状态:**
 - **境界:** 等级 ${gameState.level}
@@ -1024,9 +1063,9 @@
 - **前情提要:** "${previousSceneText.slice(-250)}"
 - **玩家的行动:** "${playerChoiceText}"
 
-**输出规范 (严格遵守JSON格式):**
+**输出规范 (严格遵守JSON格式，所有数值必须是数字):**
 {
-  "text": "纯粹的事件描述(300-500字)。结尾必须是一个具体的高潮或转折画面，没有任何引导语。",
+  "text": "纯粹的事件描述(150-300字)。结尾必须是一个具体的高潮或转折画面，没有任何引导语。",
   "imagePrompt": "Chinese ink painting, [与'text'内容高度相关的具体场景、人物、动作关键词]",
   "choices": [
     {"text": "符合当前情景的行动1", "target": "action_1"},
@@ -1034,10 +1073,10 @@
     {"text": "可能改变当前局势的冒险行动3", "target": "action_3"}
   ],
   "gameStateUpdates": {
-    "health": "数值变化(例如 -10 或 +5)",
-    "coins": "数值变化",
-    "reputation": "数值变化",
-    "level": "数值变化"
+    "health": -10,
+    "coins": 50,
+    "reputation": 1,
+    "level": 0
   },
   "itemUpdates": {"add": ["获得的物品名"], "remove": ["消耗的物品ID"]},
   "unlockAchievements": ["需要解锁的成就ID"],
@@ -1108,74 +1147,40 @@
 
             // 尝试修复不完整的JSON
             function tryFixIncompleteJson(jsonStr) {
-                // 如果JSON字符串被截断，尝试修复
-                if (!jsonStr.trim().endsWith('}')) {
-                    // 检查是否在字符串值中被截断
-                    const lastQuoteIndex = jsonStr.lastIndexOf('"');
-                    const lastCommaIndex = jsonStr.lastIndexOf(',');
-                    const lastColonIndex = jsonStr.lastIndexOf(':');
-                    
-                    if (lastColonIndex > lastCommaIndex && lastQuoteIndex < lastColonIndex) {
-                        // 可能在属性值开始处被截断，添加默认值和结束括号
-                        const truncatedKey = jsonStr.substring(jsonStr.lastIndexOf('"', lastColonIndex - 1) + 1, lastColonIndex - 1);
-                        console.log("检测到截断的属性:", truncatedKey);
-                        
-                        if (truncatedKey === 'imagePrompt') {
-                            jsonStr += ' "A mystical Chinese cultivation world scene"';
-                        } else {
-                            jsonStr += ' ""';
-                        }
-                        
-                        // 添加缺失的字段和结束括号
-                        if (!jsonStr.includes('"choices"')) {
-                            jsonStr += ', "choices": [{"text": "继续探索", "target": "continue"}]';
-                        }
-                        if (!jsonStr.includes('"gameStateUpdates"')) {
-                            jsonStr += ', "gameStateUpdates": {}';
-                        }
-                        if (!jsonStr.includes('"itemUpdates"')) {
-                            jsonStr += ', "itemUpdates": {"add": [], "remove": []}';
-                        }
-                        if (!jsonStr.includes('"unlockAchievements"')) {
-                            jsonStr += ', "unlockAchievements": []';
-                        }
-                        if (!jsonStr.includes('"logEntry"')) {
-                            jsonStr += ', "logEntry": "继续冒险..."';
-                        }
-                        
-                        jsonStr += '}';
-                    } else if (lastQuoteIndex > lastColonIndex) {
-                        // 可能在字符串值中被截断，关闭字符串和对象
-                        jsonStr += '"';
-                        
-                        // 添加缺失的字段
-                        const requiredFields = ['choices', 'gameStateUpdates', 'itemUpdates', 'unlockAchievements', 'logEntry'];
-                        for (const field of requiredFields) {
-                            if (!jsonStr.includes(`"${field}"`)) {
-                                switch (field) {
-                                    case 'choices':
-                                        jsonStr += ', "choices": [{"text": "继续探索", "target": "continue"}]';
-                                        break;
-                                    case 'gameStateUpdates':
-                                        jsonStr += ', "gameStateUpdates": {}';
-                                        break;
-                                    case 'itemUpdates':
-                                        jsonStr += ', "itemUpdates": {"add": [], "remove": []}';
-                                        break;
-                                    case 'unlockAchievements':
-                                        jsonStr += ', "unlockAchievements": []';
-                                        break;
-                                    case 'logEntry':
-                                        jsonStr += ', "logEntry": "继续冒险..."';
-                                        break;
-                                }
-                            }
-                        }
-                        
-                        jsonStr += '}';
-                    }
+                jsonStr = jsonStr.trim();
+                
+                // 尝试找到最后一个有效的JSON字符（'}' 或 ']' 或 '"'）
+                const lastBrace = jsonStr.lastIndexOf('}');
+                const lastBracket = jsonStr.lastIndexOf(']');
+                const lastQuote = jsonStr.lastIndexOf('"');
+                const lastNumber = jsonStr.search(/[0-9]\s*$/);
+
+                const lastValidCharIndex = Math.max(lastBrace, lastBracket, lastQuote, lastNumber);
+
+                // 如果字符串在最后一个有效字符后还有内容，说明可能被截断了
+                if (lastValidCharIndex !== -1 && lastValidCharIndex < jsonStr.length - 1) {
+                    // 截断到最后一个有效字符
+                    jsonStr = jsonStr.substring(0, lastValidCharIndex + 1);
                 }
                 
+                // 重新计算括号和花括号的配平
+                let openBraces = (jsonStr.match(/{/g) || []).length;
+                let closeBraces = (jsonStr.match(/}/g) || []).length;
+                let openBrackets = (jsonStr.match(/\[/g) || []).length;
+                let closeBrackets = (jsonStr.match(/\]/g) || []).length;
+
+                // 闭合未闭合的括号
+                while (openBrackets > closeBrackets) {
+                    jsonStr += ']';
+                    closeBrackets++;
+                }
+                
+                // 闭合未闭合的花括号
+                while (openBraces > closeBraces) {
+                    jsonStr += '}';
+                    closeBraces++;
+                }
+
                 return jsonStr;
             }
 
@@ -1225,7 +1230,7 @@
                     const updates = content.gameStateUpdates;
                     ['health', 'maxHealth', 'attack', 'defense', 'agility', 'charm', 'coins', 'reputation', 'level'].forEach(key => {
                         if (updates[key] !== undefined && typeof gameState[key] === 'number') {
-                            gameState[key] += updates[key];
+                            gameState[key] += Number(updates[key]);
                         }
                     });
                     if (gameState.health < 0) gameState.health = 0;
@@ -1315,7 +1320,7 @@
                 // 尝试从截断的JSON中提取text字段
                 const textMatch = contentString.match(/"text":\s*"([^"]*(?:\\.[^"]*)*)/);
                 if (textMatch && textMatch[1]) {
-                    extractedText = textMatch[1].replace(/\\"/g, '"').replace(/\\n/g, '\n');
+                    extractedText = textMatch[1].replace(/\\"/g, '"').replace(/\n/g, '\n');
                     console.log("从截断的JSON中提取到文本:", extractedText);
                 }
                 
