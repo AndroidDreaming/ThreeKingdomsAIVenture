@@ -5,1628 +5,1149 @@
      crossorigin="anonymous"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="《云渺仙途：凡尘篇》是一个由AI驱动的文字修仙沙盒游戏。在这里，你可以体验从凡人到仙帝的完整修仙之旅，探索广阔的云渺大陆，做出你的选择，书写你的传奇。">
-    <meta name="keywords" content="修仙, 文字游戏, MUD, AI, 沙盒, 凡人修仙, 云渺大陆, 角色扮演, RPG, 互动小说">
+    <meta name="description" content="《三国志：乱世争雄》是一个由AI驱动的文字策略游戏。在这里，你将置身于波澜壮阔的三国时代，从一介布衣到称霸一方，招募将领，发展城池，书写你的霸业传奇。">
+    <meta name="keywords" content="三国, 文字游戏, 策略, AI, 沙盒, 角色扮演, RPG, 互动小说, 乱世">
     <meta name="author" content="AI沙盒世界">
 
-    <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://ai-game.jkai.de/">
-    <meta property="og:title" content="云渺仙途：凡尘篇 - AI驱动的沙盒修仙世界">
-    <meta property="og:description" content="开启你的修仙之旅，从一介凡人到掌控天地，你的每一步选择都将铸就独一无二的传奇。">
-    <meta property="og:image" content="https://ai-game.jkai.de/preview-image.jpg">
-
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://ai-game.jkai.de/">
-    <meta property="twitter:title" content="云渺仙途：凡尘篇 - AI驱动的沙盒修仙世界">
-    <meta property="twitter:description" content="开启你的修仙之旅，从一介凡人到掌控天地，你的每一步选择都将铸就独一无二的传奇。">
-    <meta property="twitter:image" content="https://ai-game.jkai.de/preview-image.jpg">
-    <title>云渺仙途：凡尘篇 - AI沙盒世界</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <meta property="og:url" content="https://your-game-url.com/"> <meta property="og:title" content="三国志：乱世争雄 - AI驱动的沙盒策略游戏">
+    <meta property="og:description" content="穿越至三国乱世，招募群雄，发展势力，以智谋与武力统一天下，你的每一次选择都将影响历史的走向。">
+    <meta property="og:image" content="https://your-game-url.com/preview-image-sanguo.jpg"> <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://your-game-url.com/"> <meta property="twitter:title" content="三国志：乱世争雄 - AI驱动的沙盒策略游戏">
+    <meta property="twitter:description" content="穿越至三国乱世，招募群雄，发展势力，以智谋与武力统一天下，你的每一次选择都将影响历史的走向。">
+    <meta property="twitter:image" content="https://your-game-url.com/preview-image-sanguo.jpg"> <title>三国志：乱世争雄 - AI沙盒世界</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2jrdWGYoSBM/Qj+a6PzAUu5+K4vQzJ/pL4mWQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
-        :root {
-            --panda-color: #4ECDC4;
-            --mushroom-color: #FF6B6B;
-            --coriander-color: #06D6A0;
-            --dark-bg: #1A1A2E;
-            --darker-bg: #0D0D1A;
-            --light-text: #F7F9F9;
-            --pixel-border: #4ECDC4;
+        /* 引入中文字体 */
+        @font-face {
+            font-family: 'LongCang';
+            src: url('https://fonts.gstatic.com/s/longcang/v19/HhyaU5mfoSi_gW-t7QgtC0c.woff2') format('woff2');
+            font-weight: normal;
+            font-style: normal;
+            font-display: swap;
         }
-        
-        * {
+
+        @font-face {
+            font-family: 'ZhiMangXing';
+            src: url('https://fonts.gstatic.com/s/zhimangxing/v19/uU9ez_h2rlXoYfK_cM_hzM_x0YfL-z0.woff2') format('woff2');
+            font-weight: normal;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        /* 全局样式 */
+        body {
+            font-family: 'LongCang', cursive, sans-serif; /* 主要文字使用此字体 */
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-            font-family: 'Press Start 2P', 'Courier New', monospace;
-        }
-        
-        body {
-            background: var(--dark-bg);
-            color: var(--light-text);
-            min-height: 100vh;
-            padding: 20px;
-            background-image: 
-                radial-gradient(circle at 10% 20%, rgba(78, 205, 196, 0.1) 0%, transparent 20%),
-                radial-gradient(circle at 90% 80%, rgba(255, 107, 107, 0.1) 0%, transparent 20%);
-            overflow-x: hidden;
-        }
-        
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
+            background: linear-gradient(to bottom right, #2a2a2a, #000); /* 深色渐变背景 */
+            color: #e0e0e0; /* 默认文字颜色 */
             display: flex;
             flex-direction: column;
-            min-height: 95vh;
+            min-height: 100vh;
         }
-        
+
+        /* 标题部分 */
         header {
             text-align: center;
-            padding: 20px;
-            margin-bottom: 20px;
-            position: relative;
-            border-bottom: 4px dotted var(--pixel-border);
+            padding: 25px 20px;
+            background-color: #1a1a1a;
+            border-bottom: 2px solid #444; /* 更明显的分割线 */
+            box-shadow: 0 4px 8px rgba(0,0,0,0.5); /* 增加阴影 */
         }
-        
-        h1 {
-            font-size: 2.8rem;
-            margin-bottom: 15px;
-            color: var(--panda-color);
-            text-shadow: 3px 3px 0 var(--mushroom-color), 
-                         6px 6px 0 var(--coriander-color);
-            letter-spacing: 2px;
-            line-height: 1.3;
+
+        header h1 {
+            font-family: 'ZhiMangXing', cursive, sans-serif; /* 标题使用此字体 */
+            color: #ffd700; /* 醒目的金色 */
+            margin-bottom: 8px;
+            font-size: 3.2em; /* 增大标题 */
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.9); /* 更深沉的阴影 */
+            letter-spacing: 2px; /* 增加字间距 */
         }
-        
-        .subtitle {
-            font-size: 1.2rem;
-            color: var(--pixel-border);
-            margin-bottom: 15px;
+
+        header .subtitle {
+            color: #b0b0b0;
+            font-size: 1.2em;
+            margin-top: 5px;
         }
-        
-        .game-ui {
-            display: grid;
-            grid-template-columns: 3fr 1fr;
-            gap: 20px;
-            flex: 1;
+
+        /* 主要内容区域 */
+        .main-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 25px; /* 增加组件间距 */
+            padding: 25px;
+            flex-grow: 1;
+            box-sizing: border-box;
         }
-        
+
+        /* 游戏主区域 */
         .game-area {
-            background: rgba(13, 13, 26, 0.8);
-            border: 4px solid var(--pixel-border);
-            border-radius: 8px;
-            padding: 20px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+            flex: 2 1 650px; /* 调整宽度占比 */
+            background-color: #1c1c1c; /* 略浅于背景的深色 */
+            border: 1px solid #3a3a3a;
+            border-radius: 12px; /* 更圆润的边角 */
+            padding: 25px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.8); /* 更明显的阴影 */
             display: flex;
             flex-direction: column;
-            position: relative;
-            overflow: hidden;
+            min-height: 550px; /* 最小高度 */
         }
-        
-        .scene-container {
-            position: relative;
-            min-height: 300px;
-            margin-bottom: 20px;
-            border: 3px solid var(--pixel-border);
-            border-radius: 5px;
+
+        /* 场景图片容器 */
+        .image-container {
+            text-align: center;
+            margin-bottom: 25px;
+            min-height: 220px;
+            background-color: #1a1a1a;
+            border-radius: 8px;
             overflow: hidden;
-            background: rgba(0, 0, 0, 0.3);
             display: flex;
             align-items: center;
             justify-content: center;
+            border: 1px solid #333; /* 图片框边框 */
         }
-        
-        #scene-img {
+
+        .game-image {
             max-width: 100%;
-            max-height: 280px;
-            border-radius: 4px;
-            image-rendering: pixelated;
+            max-height: 450px; /* 限制图片高度 */
+            height: auto;
+            border-radius: 8px;
+            display: block;
         }
-        
+
+        /* 故事文本区域 */
         .story-text {
-            background: rgba(0, 0, 0, 0.5);
-            border: 2px solid var(--pixel-border);
-            border-radius: 5px;
+            font-size: 1.3em; /* 增大字体 */
+            line-height: 1.8; /* 增加行高，提升阅读舒适度 */
+            margin-bottom: 25px;
+            background-color: #1a1a1a;
             padding: 20px;
-            margin-bottom: 20px;
-            font-size: 1.1rem;
-            line-height: 1.6;
-            min-height: 150px;
-            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.7);
+            border-radius: 8px;
+            border: 1px solid #333;
+            flex-grow: 1;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: #666 #2a2a2a; /* 自定义滚动条颜色 */
+            text-align: justify; /* 两端对齐 */
         }
-        
+
+        /* 自定义滚动条 */
+        .story-text::-webkit-scrollbar,
+        .scrollable-content::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        .story-text::-webkit-scrollbar-track,
+        .scrollable-content::-webkit-scrollbar-track {
+            background: #2a2a2a;
+            border-radius: 10px;
+        }
+
+        .story-text::-webkit-scrollbar-thumb,
+        .scrollable-content::-webkit-scrollbar-thumb {
+            background-color: #666; /* 滚动条颜色 */
+            border-radius: 10px;
+            border: 2px solid #2a2a2a;
+        }
+
+        /* 选项按钮容器 */
         .choices-container {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); /* 调整最小宽度 */
+            gap: 15px; /* 增加按钮间距 */
+            margin-top: 25px;
         }
-        
+
+        /* 选项按钮 */
         .choice-btn {
-            background: linear-gradient(145deg, #2a2a4a, #1f1f3a);
-            border: 3px solid var(--pixel-border);
-            color: var(--light-text);
-            padding: 15px;
-            border-radius: 5px;
-            font-size: 1rem;
+            background-color: #383838; /* 按钮背景色 */
+            color: #e0e0e0;
+            border: 1px solid #555;
+            padding: 15px 20px; /* 增大按钮填充 */
+            border-radius: 8px; /* 圆润边角 */
+            font-size: 1.2em; /* 增大字体 */
             cursor: pointer;
-            transition: all 0.2s ease;
-            text-align: left;
-            position: relative;
-            overflow: hidden;
+            transition: background-color 0.3s, border-color 0.3s, transform 0.2s; /* 增加动画效果 */
+            font-family: 'LongCang', cursive, sans-serif;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.4);
         }
-        
+
         .choice-btn:hover {
-            background: linear-gradient(145deg, #3a3a5a, #2f2f4a);
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+            background-color: #4a4a4a;
+            border-color: #777;
+            transform: translateY(-2px); /* 悬停上浮效果 */
         }
-        
+
         .choice-btn:active {
-            transform: translateY(1px);
+            background-color: #2a2a2a;
+            border-color: #444;
+            transform: translateY(0); /* 点击下沉效果 */
         }
-        
-        .choice-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(
-                90deg,
-                transparent,
-                rgba(255, 255, 255, 0.2),
-                transparent
-            );
-            transition: 0.5s;
-        }
-        
-        .choice-btn:hover::before {
-            left: 100%;
-        }
-        
-        .skill-btn {
+
+        /* 侧边栏 */
+        .sidebar {
+            flex: 1 1 350px; /* 调整宽度占比 */
+            background-color: #1c1c1c;
+            border: 1px solid #3a3a3a;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.8);
             display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-top: 8px;
+            flex-direction: column;
+            gap: 25px; /* 增加面板间距 */
         }
-        
-        .stats-panel {
-            background: rgba(13, 13, 26, 0.8);
-            border: 4px solid var(--pixel-border);
+
+        /* 侧边栏面板 */
+        .panel {
+            background-color: #1a1a1a;
+            border: 1px solid #333;
             border-radius: 8px;
             padding: 20px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
+            box-sizing: border-box;
+            box-shadow: inset 0 0 8px rgba(0,0,0,0.5); /* 内部阴影 */
         }
-        
+
         .panel-title {
-            font-size: 1.4rem;
-            color: var(--pixel-border);
-            text-align: center;
+            color: #ffd700;
+            font-family: 'ZhiMangXing', cursive, sans-serif;
+            font-size: 1.8em; /* 增大面板标题 */
+            margin-top: 0;
             margin-bottom: 15px;
-            border-bottom: 2px dotted var(--pixel-border);
-            padding-bottom: 10px;
-        }
-        
-        .character-info {
-            background: rgba(0, 0, 0, 0.4);
-            border-radius: 5px;
-            padding: 15px;
-            border: 2px solid var(--panda-color);
-        }
-        
-        .char-header {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 15px;
-        }
-        
-        .char-icon {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background: var(--panda-color);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2rem;
-            flex-shrink: 0;
-        }
-        
-        .char-name {
-            font-size: 1.4rem;
-            color: var(--panda-color);
-        }
-        
-        .health-bar {
-            height: 20px;
-            background: rgba(0, 0, 0, 0.4);
-            border-radius: 10px;
-            margin: 10px 0;
-            overflow: hidden;
-            position: relative;
-        }
-        
-        .health-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--panda-color), #ff8e8e);
-            border-radius: 10px;
-            transition: width 0.5s ease;
-        }
-        
-        .health-text {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.8rem;
-        }
-        
-        .stats-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-        }
-        
-        .stat-item {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 10px;
-            border-radius: 5px;
             text-align: center;
-        }
-        
-        .stat-value {
-            font-size: 1.4rem;
-            color: var(--pixel-border);
-        }
-        
-        .skills-container, .inventory-container, .achievement-container, .adventure-log-container {
-            background: rgba(0, 0, 0, 0.4);
-            border-radius: 5px;
-            padding: 15px;
+            border-bottom: 2px solid #444; /* 更明显的标题下划线 */
+            padding-bottom: 8px;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
         }
 
-        .scrollable-content {
-            max-height: 150px;
-            overflow-y: auto;
-            padding-right: 10px; /* for scrollbar */
-        }
-        
-        .skills-container { border: 2px solid var(--mushroom-color); }
-        .inventory-container { border: 2px solid var(--coriander-color); }
-        .achievement-container { border: 2px solid gold; }
-        .adventure-log-container { border: 2px solid var(--pixel-border); }
-        
-        .skill-list {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-        
-        .skill-item {
-            background: rgba(106, 13, 173, 0.3);
-            padding: 10px;
-            margin-bottom: 10px;
-            border-radius: 5px;
-            border-left: 4px solid var(--mushroom-color);
-        }
-        
-        .skill-name {
-            color: var(--mushroom-color);
-            margin-bottom: 3px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-weight: bold;
-        }
-        
-        .skill-description {
-            color: rgba(255, 255, 255, 0.8);
-            font-size: 0.85rem;
-            line-height: 1.3;
-        }
-        
-        .items-grid {
-            display: block;
-            margin-top: 10px;
-        }
-
-        .item-text, .achievement-text {
-            padding: 2px 5px;
-            text-align: left;
-            width: 100%;
-        }
-        
-        .pixel-corner {
-            position: absolute;
-            width: 20px;
-            height: 20px;
-        }
-        
-        .pixel-corner.tl { top: 0; left: 0; border-top: 4px solid var(--pixel-border); border-left: 4px solid var(--pixel-border); }
-        .pixel-corner.tr { top: 0; right: 0; border-top: 4px solid var(--pixel-border); border-right: 4px solid var(--pixel-border); }
-        .pixel-corner.bl { bottom: 0; left: 0; border-bottom: 4px solid var(--pixel-border); border-left: 4px solid var(--pixel-border); }
-        .pixel-corner.br { bottom: 0; right: 0; border-bottom: 4px solid var(--pixel-border); border-right: 4px solid var(--pixel-border); }
-        
+        /* 顶部状态栏 */
         .status-bar {
             display: flex;
             justify-content: space-around;
-            margin-bottom: 15px;
-            padding: 10px;
-            background: rgba(0, 0, 0, 0.4);
-            border-radius: 5px;
-            border: 2px solid var(--pixel-border);
+            background-color: #1a1a1a;
+            border-top: 2px solid #444;
+            padding: 15px 20px;
+            text-align: center;
+            box-shadow: 0 -4px 8px rgba(0,0,0,0.5); /* 增加阴影 */
         }
-        
+
         .status-item {
+            flex: 1;
+            padding: 0 15px;
+            font-size: 1.2em; /* 增大字体 */
+            color: #bbb;
             display: flex;
             flex-direction: column;
             align-items: center;
+            gap: 5px; /* 标签和值之间的间距 */
         }
-        
-        .status-value {
-            font-size: 1.4rem;
-            color: var(--pixel-border);
+
+        .status-item span:first-child {
+            font-size: 0.9em;
+            color: #999;
         }
-        
-        .loading {
+
+        .status-item .status-value {
+            color: #eee;
+            font-weight: bold;
+            font-size: 1.1em; /* 增大数值字体 */
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        /* 角色信息面板 */
+        .character-info .char-header {
+            display: flex;
+            align-items: center;
+            gap: 15px; /* 增加头像和名称间距 */
+            margin-bottom: 15px;
+            justify-content: center; /* 居中显示 */
+        }
+
+        .character-info .char-icon {
+            font-size: 3em; /* 增大图标 */
+            color: #ffd700;
+        }
+
+        .character-info .char-name {
+            font-size: 2.2em; /* 增大名称字体 */
+            font-family: 'ZhiMangXing', cursive, sans-serif;
+            color: #eee;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.6);
+        }
+
+        .health-bar {
+            width: 100%;
+            height: 25px; /* 增大血条高度 */
+            background-color: #555;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 15px;
+            position: relative;
+            box-shadow: inset 0 0 5px rgba(0,0,0,0.5);
+        }
+
+        .health-fill {
+            height: 100%;
+            background-color: #dc3545; /* 鲜艳的红色 */
+            width: 100%;
+            border-radius: 12px;
+            transition: width 0.5s ease-in-out;
+        }
+
+        .health-text {
             position: absolute;
+            width: 100%;
+            text-align: center;
+            line-height: 25px;
+            color: #fff;
+            font-size: 1em;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.7);
+            font-weight: bold;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px; /* 增加属性间距 */
+        }
+
+        .stat-item {
+            background-color: #2a2a2a;
+            padding: 10px 15px; /* 增大填充 */
+            border-radius: 6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 1.15em;
+            color: #c0c0c0;
+            border: 1px solid #3d3d3d;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+        }
+
+        .stat-item .stat-value {
+            color: #ffd700; /* 金色数值 */
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+        /* 可滚动内容区域（技能、物品、成就、日志） */
+        .scrollable-content {
+            max-height: 180px; /* 增大高度 */
+            overflow-y: auto;
+            border: 1px solid #3a3a3a;
+            border-radius: 6px;
+            padding: 12px;
+            background-color: #2a2a2a;
+            box-shadow: inset 0 0 5px rgba(0,0,0,0.5);
+        }
+
+        .skill-item, .item-text, .achievement-text, .adventure-log-entry {
+            background-color: #333;
+            padding: 10px; /* 增大填充 */
+            border-radius: 5px;
+            margin-bottom: 8px; /* 增加行间距 */
+            font-size: 1em;
+            color: #ccc;
+            border-left: 3px solid #ffd700; /* 左侧金条 */
+            transition: background-color 0.2s;
+        }
+
+        .skill-item:hover, .item-text:hover, .achievement-text:hover, .adventure-log-entry:hover {
+            background-color: #3d3d3d;
+        }
+
+        .skill-item .skill-name {
+            color: #ffd700;
+            font-weight: bold;
+            margin-bottom: 5px;
+            font-size: 1.1em;
+        }
+
+        .skill-item .skill-description {
+            font-size: 0.9em;
+            color: #bbb;
+        }
+
+        .item-text i, .skill-item i {
+            margin-right: 8px;
+            color: #ffd700;
+        }
+
+        /* 加载动画 */
+        .loading-overlay {
+            position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.8);
+            background: rgba(0, 0, 0, 0.85); /* 更深的半透明背景 */
             display: flex;
             flex-direction: column;
-            align-items: center;
             justify-content: center;
-            z-index: 10;
-            opacity: 0;
+            align-items: center;
+            color: white;
+            font-size: 1.8em; /* 增大字体 */
+            z-index: 1000;
             pointer-events: none;
-            transition: opacity 0.3s ease;
+            opacity: 0;
+            transition: opacity 0.4s ease-in-out;
+            font-family: 'ZhiMangXing', cursive, sans-serif;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
         }
-        
-        .loading.active {
+
+        .loading-overlay.visible {
             opacity: 1;
             pointer-events: all;
         }
-        
+
         .loading-spinner {
-            width: 50px;
-            height: 50px;
-            border: 5px solid rgba(78, 205, 196, 0.3);
-            border-top: 5px solid var(--pixel-border);
+            border: 5px solid rgba(255, 255, 255, 0.3);
+            border-top: 5px solid #ffd700; /* 金色旋转 */
             border-radius: 50%;
-            animation: spin 1s linear infinite;
+            width: 60px; /* 增大加载圈 */
+            height: 60px;
+            animation: spin 1.2s linear infinite; /* 稍微慢一点 */
             margin-bottom: 20px;
         }
-        
+
         @keyframes spin {
-            to { transform: rotate(360deg); }
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
-        
-        .loading-text {
-            font-size: 1.2rem;
-            color: var(--pixel-border);
-            text-align: center;
-        }
-        
+
+        /* 页脚 */
         footer {
             text-align: center;
             padding: 20px;
-            margin-top: 20px;
-            color: rgba(255, 255, 255, 0.6);
-            font-size: 0.9rem;
-            border-top: 2px dotted var(--pixel-border);
+            background-color: #1a1a1a;
+            border-top: 2px solid #444;
+            color: #888;
+            font-size: 1em;
+            margin-top: auto;
+            box-shadow: 0 -4px 8px rgba(0,0,0,0.5);
         }
-        
-        @media (max-width: 768px) {
-            .game-ui { grid-template-columns: 1fr; }
-            h1 { font-size: 2rem; }
-            .choices-container { grid-template-columns: 1fr; }
-            
-            .game-controls {
+
+        /* 响应式布局 */
+        @media (max-width: 1200px) {
+            .main-container {
                 flex-direction: column;
-                gap: 10px;
-                margin: 15px 0;
-                padding: 10px;
+                align-items: center;
+                padding: 20px;
             }
-            
-            .control-btn {
-                padding: 10px 15px;
-                font-size: 0.9rem;
+
+            .game-area, .sidebar {
+                flex: none;
+                width: 90%;
+                max-width: 800px;
+                padding: 20px;
             }
-            
+
+            .story-text {
+                font-size: 1.2em;
+            }
+
+            .choice-btn {
+                font-size: 1.1em;
+                padding: 12px 15px;
+            }
+
+            .header h1 {
+                font-size: 2.8em;
+            }
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2.5em;
+            }
+
+            header .subtitle {
+                font-size: 1em;
+            }
+
             .status-bar {
                 flex-wrap: wrap;
+                padding: 10px;
+            }
+
+            .status-item {
+                flex: 0 0 50%; /* 每行显示两个状态 */
+                margin-bottom: 10px;
+                font-size: 1em;
+            }
+
+            .game-area, .sidebar {
+                width: 95%;
+                padding: 15px;
+                gap: 20px;
+            }
+
+            .story-text {
+                font-size: 1.1em;
+                padding: 15px;
+            }
+
+            .choices-container {
+                grid-template-columns: 1fr; /* 在小屏幕上单列显示按钮 */
                 gap: 10px;
-                justify-content: center;
+            }
+
+            .choice-btn {
+                font-size: 1em;
+                padding: 10px 12px;
+            }
+
+            .panel-title {
+                font-size: 1.6em;
+            }
+
+            .character-info .char-icon {
+                font-size: 2.5em;
+            }
+
+            .character-info .char-name {
+                font-size: 1.8em;
+            }
+
+            .health-bar {
+                height: 20px;
+            }
+
+            .stats-grid {
+                gap: 10px;
+            }
+
+            .stat-item {
+                font-size: 1em;
+                padding: 8px 10px;
+            }
+            .scrollable-content {
+                max-height: 150px;
+            }
+            .loading-spinner {
+                width: 40px;
+                height: 40px;
+            }
+            .loading-overlay p {
+                font-size: 1.3em;
             }
         }
-        
-        .api-settings-container {
-            background: var(--darker-bg);
-            padding: 20px;
-            margin-top: 20px;
-            border: 2px solid var(--pixel-border);
-            border-radius: 8px;
-        }
-        .api-settings {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr auto auto;
-            gap: 15px;
-            align-items: center;
-        }
-        .api-settings input {
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid var(--pixel-border);
-            color: var(--light-text);
-            padding: 10px;
-            border-radius: 4px;
-            font-family: 'Courier New', monospace;
-        }
-        .api-settings-select {
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid var(--pixel-border);
-            color: var(--light-text);
-            padding: 10px;
-            border-radius: 4px;
-            font-family: 'Courier New', monospace;
-            width: 100%;
-            cursor: pointer;
-        }
-        .api-settings-select option {
-            background: var(--darker-bg);
-            color: var(--light-text);
-        }
-        .api-settings button {
-             background: var(--pixel-border);
-             color: var(--darker-bg);
-             border: none;
-             padding: 10px 15px;
-             border-radius: 4px;
-             cursor: pointer;
-             font-weight: bold;
-        }
-        
-        .game-controls {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin: 20px 0;
-            padding: 15px;
-            background: rgba(13, 13, 26, 0.6);
-            border: 2px solid var(--pixel-border);
-            border-radius: 8px;
-        }
-        
-        .control-btn {
-            background: linear-gradient(145deg, #2a2a4a, #1f1f3a);
-            border: 2px solid var(--pixel-border);
-            color: var(--light-text);
-            padding: 12px 20px;
-            border-radius: 6px;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-family: 'Press Start 2P', 'Courier New', monospace;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .control-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-        }
-        
-        .control-btn:active {
-            transform: translateY(0);
-        }
-        
-        .reset-btn:hover {
-            border-color: var(--mushroom-color);
-            background: linear-gradient(145deg, #4a2a2a, #3a1f1f);
-        }
-        
-        .control-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(
-                90deg,
-                transparent,
-                rgba(255, 255, 255, 0.1),
-                transparent
-            );
-            transition: 0.5s;
-        }
-        
-        .control-btn:hover::before {
-            left: 100%;
+
+        @media (max-width: 480px) {
+            header {
+                padding: 15px 10px;
+            }
+            header h1 {
+                font-size: 2em;
+            }
+            .main-container {
+                padding: 10px;
+                gap: 15px;
+            }
+            .game-area, .sidebar {
+                padding: 10px;
+                gap: 15px;
+            }
+            .status-item {
+                flex: 0 0 100%; /* 在更小的屏幕上每行一个状态 */
+                font-size: 0.9em;
+            }
+            .story-text {
+                font-size: 1em;
+                padding: 10px;
+            }
+            .choice-btn {
+                font-size: 0.9em;
+                padding: 8px 10px;
+            }
+            .panel-title {
+                font-size: 1.4em;
+            }
+            .character-info .char-name {
+                font-size: 1.5em;
+            }
+            .stat-item {
+                font-size: 0.9em;
+            }
+            .scrollable-content {
+                max-height: 120px;
+            }
         }
     </style>
 </head>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-DFX8DXLG3F"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-DFX8DXLG3F');
-</script>
 <body>
-    <div class="container">
-        <header>
-            <h1>云渺仙途：凡尘篇</h1>
-            <p class="subtitle">一个由AI驱动的沙盒修仙世界</p>
-        </header>
+    <div class="loading-overlay" id="loading-overlay">
+        <div class="loading-spinner"></div>
+        <p id="loading-text">正在分析乱世局势...</p>
+    </div>
 
-        <div class="status-bar">
-            <div class="status-item"><span>灵石</span><span class="status-value">50</span></div>
-            <div class="status-item"><span>声望</span><span class="status-value">0</span></div>
-            <div class="status-item"><span>境界</span><span class="status-value">凡人</span></div>
-        </div>
+    <header>
+        <h1>三国志：乱世争雄</h1>
+        <p class="subtitle">一个由AI驱动的沙盒策略游戏</p>
+    </header>
 
-        <div class="game-controls">
-            <button id="reset-game-btn" class="control-btn reset-btn">🔄 重置游戏</button>
-        </div>
+    <div class="status-bar">
+        <div class="status-item"><span>金钱</span><span class="status-value" id="coins-value">0</span></div>
+        <div class="status-item"><span>声望</span><span class="status-value" id="reputation-value">0</span></div>
+        <div class="status-item"><span>官职</span><span class="status-value" id="level-value">布衣</span></div>
+        <div class="status-item"><span>粮草</span><span class="status-value" id="food-value">0</span></div>
+    </div>
 
-        <div class="game-ui">
-            <div class="game-area">
-                <div class="loading" id="loading">
-                    <div class="loading-spinner"></div>
-                    <div class="loading-text">正在生成新的冒险...</div>
-                </div>
-                <div class="scene-container">
-                    <img id="scene-img" src="" alt="场景图片">
-                </div>
-                <div class="story-text" id="story-text">
-                    你从一个悠长的梦境中惊醒，梦里是霓虹闪烁的钢铁森林，是未曾听闻的喧嚣与繁华。但眼前，却是古朴的木屋、摇曳的烛火。窗外，月华如水，仙鹤长鸣，远方山峦在云雾中若隐若现。你意识到，你来到了一个名为“云渺大陆”的修仙世界。在这里，凡人亦可凭借机缘与毅力，感悟天地，逆天改命，踏上追寻永恒的道路。一个神秘的声音在你脑海中回响：“此乃天命所归，亦是汝之抉择。选择你的起点，织就你的传奇吧。”
-                </div>
-                <div class="choices-container" id="choices-container">
-                    <button class="choice-btn" data-choice="orphan">📜 孤儿出身，身世成谜</button>
-                    <button class="choice-btn" data-choice="farmer">🌾 农家子弟，淳朴坚毅</button>
-                    <button class="choice-btn" data-choice="scholar">📚 书香门第，聪慧过人</button>
-                    <button class="choice-btn" data-choice="merchant">💰 商贾之后，精于计算</button>
-                </div>
+    <div class="main-container">
+        <div class="game-area">
+            <div class="image-container">
+                <img src="" alt="游戏场景" class="game-image" id="game-image">
             </div>
-            <div class="stats-panel">
-                <h2 class="panel-title">角色状态</h2>
+            <div class="story-text" id="story-text">
+                你从一场混沌的梦境中醒来，耳边是刀剑碰撞的喧嚣与百姓的哀嚎。你意识到，你并非身处于太平盛世，而是来到了一个战火纷飞的年代——东汉末年，群雄并起的三国乱世。在这里，天下分崩离析，民不聊生，而你，将如何在这乱世中立足，成就一番霸业？一个声音在你心中回荡：“此乃天命所归，亦是汝之抉择。选择你的出身，开启你的乱世征途吧。”
+            </div>
+            <div class="choices-container" id="choices-container">
+                <button class="choice-btn" data-choice="humble_villager">🏡 布衣出身，胸怀天下</button>
+                <button class="choice-btn" data-choice="exiled_noble">👑 落魄贵族，旧日余晖</button>
+                <button class="choice-btn" data-choice="loyal_retainer">⚔️ 忠义之士，为国效力</button>
+                <button class="choice-btn" data-choice="cunning_strategist">💡 隐居谋士，智定乾坤</button>
+            </div>
+        </div>
+
+        <div class="sidebar">
+            <div class="panel character-panel">
+                <h2 class="panel-title">主公信息</h2>
                 <div class="character-info">
                     <div class="char-header">
-                        <div class="char-icon">👤</div>
-                        <div id="char-name" class="char-name">冒险者</div>
+                        <div class="char-icon">👑</div>
+                        <div id="char-name" class="char-name">无名主公</div>
                     </div>
                     <div class="health-bar">
                         <div id="health-bar" class="health-fill"></div>
-                        <div id="health-text" class="health-text">HP: 100/100</div>
+                        <div id="health-text" class="health-text">兵力: 0/0</div>
                     </div>
                     <div class="stats-grid">
-                        <div class="stat-item"><span>攻击</span><span id="attack-value" class="stat-value">5</span></div>
-                        <div class="stat-item"><span>防御</span><span id="defense-value" class="stat-value">5</span></div>
-                        <div class="stat-item"><span>身法</span><span id="agility-value" class="stat-value">5</span></div>
-                        <div class="stat-item"><span>魅力</span><span id="charm-value" class="stat-value">5</span></div>
+                        <div class="stat-item"><span>武力</span><span id="attack-value" class="stat-value">0</span></div>
+                        <div class="stat-item"><span>统率</span><span id="defense-value" class="stat-value">0</span></div>
+                        <div class="stat-item"><span>智力</span><span id="agility-value" class="stat-value">0</span></div>
+                        <div class="stat-item"><span>政治</span><span id="charm-value" class="stat-value">0</span></div>
                     </div>
                 </div>
-                <div class="skills-container">
-                    <h3 class="panel-title">神通/功法</h3>
-                    <div id="skills-list" class="scrollable-content"></div>
-                </div>
-                <div class="inventory-container">
-                    <h3 class="panel-title">储物袋</h3>
-                    <div id="items-grid" class="scrollable-content"></div>
-                </div>
-                <div class="achievement-container">
-                    <h3 class="panel-title">成就</h3>
-                    <div id="achievement-list" class="scrollable-content"></div>
-                </div>
-                 <div class="adventure-log-container">
-                    <h3 class="panel-title">冒险日志</h3>
-                    <div id="adventure-log" class="scrollable-content"></div>
+            </div>
+
+            <div class="panel skills-panel">
+                <h3 class="panel-title">将领/策略</h3>
+                <div id="skills-list" class="scrollable-content">
+                    <div class="item-text">暂无将领或策略</div>
                 </div>
             </div>
-        </div>
 
-        <div class="api-settings-container">
-            <h3 class="panel-title">API 设置</h3>
-            <p id="api-settings-hint" style="font-size: 0.9rem; color: #888; margin-bottom: 15px;">
-                🔒 默认使用安全的后端API，无需配置。<br>
-                如需使用自定义API，请填写以下信息（配置仅存于前端浏览器，无需担心泄露）：
-            </p>
-            <div class="api-settings">
-                <input type="text" id="api-url-input" placeholder="自定义API URL (可选)">
-                <select id="model-input" class="api-settings-select"></select>
-                <input type="password" id="api-key-input" placeholder="自定义API Key (可选)">
-                <button id="save-api-btn">保存</button>
-                <button id="clear-api-btn">清除</button>
+            <div class="panel inventory-panel">
+                <h3 class="panel-title">辎重营</h3>
+                <div id="items-grid" class="scrollable-content">
+                    <div class="item-text">暂无辎重</div>
+                </div>
             </div>
-        </div>
 
-        <footer>
-            由 AI 驱动的文字冒险游戏
-        </footer>
+            <div class="panel achievement-panel">
+                <h3 class="panel-title">霸业轨迹</h3>
+                <div id="achievement-list" class="scrollable-content">
+                    <div class="achievement-text">史官尚未提笔...</div>
+                </div>
+            </div>
+
+            <div class="panel adventure-log-panel">
+                <h3 class="panel-title">史官笔记</h3>
+                <div id="adventure-log" class="scrollable-content">
+                    <div class="adventure-log-entry">你的霸业即将开启...</div>
+                </div>
+            </div>
+
+            <button class="choice-btn" onclick="resetGame()">🔄 重置游戏</button>
+        </div>
     </div>
 
+    <footer>
+        由 AI 驱动的三国策略文字游戏
+    </footer>
+
+    <script src="test-pollinations.js"></script>
     <script>
+        // DOM 元素引用
+        const storyText = document.getElementById('story-text');
+        const choicesContainer = document.getElementById('choices-container');
+        const gameImage = document.getElementById('game-image');
+        const loadingOverlay = document.getElementById('loading-overlay');
+        const loadingText = document.getElementById('loading-text');
+
+        // 状态栏元素
+        const coinsEl = document.getElementById('coins-value');
+        const reputationEl = document.getElementById('reputation-value');
+        const levelEl = document.getElementById('level-value');
+        const foodEl = document.getElementById('food-value'); // 新增粮草元素
+
+        // 角色信息面板元素
+        const charName = document.getElementById('char-name');
+        const healthBar = document.getElementById('health-bar');
+        const healthText = document.getElementById('health-text');
+        const attackEl = document.getElementById('attack-value');
+        const defenseEl = document.getElementById('defense-value');
+        const agilityEl = document.getElementById('agility-value');
+        const charmEl = document.getElementById('charm-value');
+
+        const skillsList = document.getElementById('skills-list');
+        const itemsGrid = document.getElementById('items-grid');
+        const achievementList = document.getElementById('achievement-list');
+        const adventureLogEl = document.getElementById('adventure-log');
+
         // 游戏状态
-        const gameState = {
-            faction: null,
-            health: 100,
-            maxHealth: 100,
-            attack: 5,
-            defense: 5,
-            agility: 5,
-            charm: 5,
-            coins: 50,
-            reputation: 0,
-            level: 1, // 这里 level 可以代表境界等级，例如 1-10 是练气，11-20 是筑基
-            skills: [
+        let gameState = {
+            charName: "无名主公",
+            faction: null, // 玩家所属势力，如“无名”、“义军”、“曹操势力”等
+            health: 1000, // 兵力
+            maxHealth: 1000,
+            attack: 60,   // 武力
+            defense: 60,  // 统率
+            agility: 60,  // 智力
+            charm: 60,    // 政治
+            coins: 500,   // 金钱
+            food: 1000,   // 粮草 (新增)
+            reputation: 0, // 声望/民心
+            level: 1, // 可以代表官职等级，如1-10是地方官，11-20是州牧等
+            skills: [ // 初始将领/策略
                 {
-                    name: "基础拳法",
-                    description: "基本武学招式，近身战斗时发挥作用",
-                    icon: "fa-solid fa-hand-fist"
+                    name: "基础步法",
+                    description: "简单的步兵操练，提高部队纪律性",
+                    icon: "fa-solid fa-person-military-rifle" // 更改图标
                 },
                 {
-                    name: "吐纳术",
-                    description: "调息养气，缓慢恢复体力",
-                    icon: "fa-solid fa-wind"
+                    name: "市井情报",
+                    description: "通过市井传闻获取基本信息",
+                    icon: "fa-solid fa-magnifying-glass" // 更改图标
                 }
             ],
-            items: [],
-            achievements: [
-                // 基础成就
-                { id: 'first_choice', text: '道始于足下: 做出你的第一个选择', unlocked: false },
-                { id: 'first_battle', text: '初试锋芒: 第一次经历战斗', unlocked: false },
-                { id: 'first_victory', text: '首战告捷: 赢得第一场战斗', unlocked: false },
-                { id: 'breakthrough_qi', text: '突破练气: 成功突破到练气期', unlocked: false },
-                { id: 'breakthrough_foundation', text: '筑基之始: 成功筑基', unlocked: false },
-
-                // 探索与发现
-                { id: 'found_hidden_cave', text: '洞天福地: 发现一个隐藏的洞府', unlocked: false },
-                { id: 'found_ancient_ruin', text: '上古遗迹: 找到一处古代修士的遗迹', unlocked: false },
-                { id: 'met_mysterious_master', text: '高人提点: 遇到一位神秘的前辈', unlocked: false },
-                { id: 'survive_miasma_swamp', text: '穿越毒瘴: 成功穿越致命的瘴气沼泽', unlocked: false },
-
-                // 物品与财富
-                { id: 'first_spirit_treasure', text: '得获法宝: 获得你的第一件法宝', unlocked: false },
-                { id: 'rich_man', text: '腰缠万贯: 拥有超过10000灵石', unlocked: false },
-                { id: 'master_alchemist', text: '炼丹大师: 成功炼制一枚极品丹药', unlocked: false },
-                { id: 'spirit_stone_collector', text: '灵矿收藏家: 集齐三种不同的稀有灵矿', unlocked: false },
-
-                // 战斗与技巧
-                { id: 'flawless_victory', text: '无伤胜利: 在不损失生命值的情况下赢得一场战斗', unlocked: false },
-                { id: 'slay_demon_beast', text: '斩妖除魔: 击败一头强大的妖兽', unlocked: false },
-                { id: 'master_of_spells', text: '神通自成: 领悟一项强大的神通', unlocked: false },
-                { id: 'survived_ambush', text: '死里逃生: 在一次修士的截杀中幸存下来', unlocked: false },
-                { id: 'first_skill', text: '初窥门径: 学会第一个技能', unlocked: false },
-                { id: 'skill_master', text: '技艺精湛: 掌握五种不同的技能', unlocked: false },
-                { id: 'sword_master', text: '剑道宗师: 将剑法类技能修炼到极致', unlocked: false },
-                { id: 'spell_caster', text: '法术大师: 掌握三种不同的法术', unlocked: false },
-
-                // 社交与声望
-                { id: 'high_reputation', text: '声名显赫: 在一方地域声望达到顶点', unlocked: false },
-                { id: 'sect_elder', text: '宗门长老: 成为一个宗门的长老', unlocked: false },
-                { id: 'dao_companion', text: '觅得道侣: 与另一位修士结为道侣', unlocked: false },
-                { id: 'peacemaker', text: '化解恩仇: 成功调解两个敌对势力的矛盾', unlocked: false },
-
-                // 特殊与隐藏
-                { id: 'defy_heavenly_tribulation', text: '逆天渡劫: 从一次九死一生的天劫中活了下来', unlocked: false },
-                { id: 'ancient_bloodline', text: '血脉觉醒: 觉醒了体内潜藏的上古血脉', unlocked: false },
-                { id: 'uncovered_conspiracy', text: '阴谋揭露者: 发现并揭露了一个威胁整个大陆的阴谋', unlocked: false }
+            items: [], // 物品/装备，如“方天画戟”、“赤兔马”、“青囊书”
+            achievements: [ // 成就系统
+                { id: 'first_choice', text: '乱世初现: 做出你的第一个选择', unlocked: false },
+                { id: 'first_battle', text: '初战告捷: 第一次赢得战斗', unlocked: false },
+                { id: 'recruit_general', text: '慧眼识珠: 招募第一位将领', unlocked: false },
+                { id: 'build_city', text: '开疆拓土: 发展第一座城池', unlocked: false },
+                { id: 'unify_province', text: '一统州郡: 统一一个州的所有城池', unlocked: false },
+                { id: 'defeat_famous_general', text: '斩将夺旗: 击败一位著名将领', unlocked: false },
+                { id: 'diplomatic_alliance', text: '合纵连横: 成功建立外交同盟', unlocked: false },
+                { id: 'rich_nation', text: '国富民强: 拥有超过50000金钱', unlocked: false },
+                { id: 'grand_strategist', text: '运筹帷幄: 成功策划一次大型战役', unlocked: false },
+                { id: 'emperor_coronation', text: '天下归心: 统一全国，登基称帝', unlocked: false }
             ],
             adventureLog: [],
             turn: 0,
             currentScene: "start"
         };
 
-        // DOM元素
-        const storyText = document.getElementById('story-text');
-        const choicesContainer = document.getElementById('choices-container');
-        const sceneImg = document.getElementById('scene-img');
-        const loadingOverlay = document.getElementById('loading');
-        const charName = document.getElementById('char-name');
-        const healthBar = document.getElementById('health-bar');
-        const healthText = document.getElementById('health-text');
-        const skillsList = document.getElementById('skills-list');
-        const apiUrlInput = document.getElementById('api-url-input');
-        const modelInput = document.getElementById('model-input');
-        const apiKeyInput = document.getElementById('api-key-input');
-        const saveApiBtn = document.getElementById('save-api-btn');
-        const clearApiBtn = document.getElementById('clear-api-btn');
-        const coinsEl = document.querySelector('.status-bar .status-item:nth-child(1) .status-value');
-        const reputationEl = document.querySelector('.status-bar .status-item:nth-child(2) .status-value');
-        const levelEl = document.querySelector('.status-bar .status-item:nth-child(3) .status-value');
-        const attackEl = document.getElementById('attack-value');
-        const defenseEl = document.getElementById('defense-value');
-        const agilityEl = document.getElementById('agility-value');
-        const charmEl = document.getElementById('charm-value');
-        const itemsGrid = document.getElementById('items-grid');
-        const achievementList = document.getElementById('achievement-list');
-        const adventureLogEl = document.getElementById('adventure-log');
-
-        // 保存游戏状态
-        function saveGameState() {
-            try {
-                // 保存当前的选择按钮
-                const currentChoices = [];
-                const choiceButtons = choicesContainer.querySelectorAll('.choice-btn');
-                choiceButtons.forEach(btn => {
-                    currentChoices.push({
-                        text: btn.textContent,
-                        target: btn.dataset.choice
-                    });
-                });
-
-                const saveData = {
-                    gameState: gameState,
-                    currentStoryText: storyText.textContent,
-                    currentSceneImg: sceneImg.src,
-                    currentChoices: currentChoices,
-                    saveTime: new Date().toISOString()
-                };
-                localStorage.setItem('cultivationGameSave', JSON.stringify(saveData));
-                console.log('游戏状态已保存');
-                return true;
-            } catch (error) {
-                console.error('保存游戏状态失败:', error);
-                return false;
+        // 加载游戏状态
+        function loadGameState() {
+            const savedState = localStorage.getItem('sanguoGameSave');
+            if (savedState) {
+                gameState = JSON.parse(savedState);
+                addLog("游戏进度已加载。");
+            } else {
+                addLog("开始新的三国征程。");
+            }
+            updateUI();
+            // 确保初始图片在加载时显示
+            if (!gameImage.src || gameImage.src.includes('data:image/gif') || gameImage.src.includes('about:blank')) {
+                generateImage("A panoramic view of ancient China during the Three Kingdoms period, with distant mountains, a river, and smoke rising from a battlefield, in a traditional Chinese ink painting style.", "三国乱世初始场景");
             }
         }
 
-        // 加载游戏状态
-        function loadGameState() {
-            try {
-                const saveData = localStorage.getItem('cultivationGameSave');
-                if (!saveData) return false;
-                
-                const parsed = JSON.parse(saveData);
-                if (!parsed.gameState) return false;
-                
-                // 恢复游戏状态
-                Object.assign(gameState, parsed.gameState);
+        // 保存游戏状态
+        function saveGameState() {
+            localStorage.setItem('sanguoGameSave', JSON.stringify(gameState));
+        }
 
-                // 在加载时检查游戏是否结束
-                if (gameState.health <= 0) {
-                    updateUI();
-                    storyText.textContent = "你倒在血泊之中，意识逐渐模糊... 你的冒险已在此终结。";
-                    choicesContainer.innerHTML = '';
-                    const restartBtn = document.createElement('button');
-                    restartBtn.className = 'choice-btn';
-                    restartBtn.textContent = '🔄 重新开始';
-                    restartBtn.onclick = resetGame;
-                    choicesContainer.appendChild(restartBtn);
-                    choicesContainer.style.gridTemplateColumns = '1fr';
-                    console.log('加载到游戏结束状态');
-                    return true;
-                }
-                
-                // 恢复界面
-                if (parsed.currentStoryText) {
-                    storyText.textContent = parsed.currentStoryText;
-                }
-                if (parsed.currentSceneImg && parsed.currentSceneImg !== window.location.href && !parsed.currentSceneImg.includes('undefined')) {
-                    sceneImg.src = parsed.currentSceneImg;
-                    sceneImg.style.opacity = 1;
-                }
-                
-                // 恢复选择按钮
-                if (parsed.currentChoices && Array.isArray(parsed.currentChoices)) {
-                    choicesContainer.innerHTML = '';
-                    parsed.currentChoices.forEach(choice => {
-                        const button = document.createElement('button');
-                        button.className = 'choice-btn';
-                        button.dataset.choice = choice.target;
-                        button.textContent = choice.text;
-                        choicesContainer.appendChild(button);
-                    });
-                }
-                
+        // 更新 UI
+        function updateUI() {
+            charName.textContent = gameState.charName || '无名主公'; // 默认名称
+            healthBar.style.width = `${(gameState.health / gameState.maxHealth) * 100}%`;
+            healthText.textContent = `兵力: ${gameState.health}/${gameState.maxHealth}`; // 兵力
+
+            // 更新金钱、声望、官职和粮草
+            coinsEl.textContent = gameState.coins;
+            reputationEl.textContent = gameState.reputation;
+            levelEl.textContent = getOfficialRank(gameState.level); // 根据等级获取官职
+            foodEl.textContent = gameState.food; // 更新粮草
+
+            // 更新属性
+            attackEl.textContent = gameState.attack; // 武力
+            defenseEl.textContent = gameState.defense; // 统率
+            agilityEl.textContent = gameState.agility; // 智力
+            charmEl.textContent = gameState.charm;     // 政治
+
+            // 更新技能/将领
+            skillsList.innerHTML = '';
+            if (gameState.skills.length === 0) {
+                skillsList.innerHTML = '<div class="item-text">暂无将领或策略</div>';
+            } else {
+                gameState.skills.forEach(skill => {
+                    const skillItem = document.createElement('div');
+                    skillItem.className = 'skill-item';
+                    skillItem.innerHTML = `
+                        <div class="skill-name"><i class="${skill.icon}"></i> ${skill.name}</div>
+                        <div class="skill-description">${skill.description}</div>
+                    `;
+                    skillsList.appendChild(skillItem);
+                });
+            }
+
+
+            // 更新物品/辎重
+            itemsGrid.innerHTML = '';
+            if (gameState.items.length === 0) {
+                itemsGrid.innerHTML = '<div class="item-text">暂无辎重</div>';
+            } else {
+                gameState.items.forEach(item => {
+                    const itemElement = document.createElement('div');
+                    itemElement.className = 'item-text';
+                    itemElement.textContent = `${item.name} (${item.quantity})`;
+                    itemsGrid.appendChild(itemElement);
+                });
+            }
+
+            // 更新成就/霸业轨迹
+            achievementList.innerHTML = '';
+            const unlockedAchievements = gameState.achievements.filter(a => a.unlocked);
+            if (unlockedAchievements.length === 0) {
+                achievementList.innerHTML = '<div class="achievement-text">暂无霸业轨迹</div>';
+            } else {
+                unlockedAchievements.forEach(ach => {
+                    const achElement = document.createElement('div');
+                    achElement.className = 'achievement-text';
+                    achElement.textContent = `✅ ${ach.text}`;
+                    achievementList.appendChild(achElement);
+                });
+            }
+
+            // 更新冒险日志/史官笔记
+            adventureLogEl.innerHTML = '';
+            if (gameState.adventureLog.length === 0) {
+                adventureLogEl.innerHTML = '<div class="adventure-log-entry">史官尚未提笔...</div>';
+            } else {
+                gameState.adventureLog.slice().reverse().forEach(log => { // 显示最新日志
+                    const logEntry = document.createElement('div');
+                    logEntry.className = 'adventure-log-entry';
+                    logEntry.textContent = log;
+                    adventureLogEl.appendChild(logEntry);
+                });
+            }
+
+            saveGameState(); // 每次更新UI后保存游戏状态
+        }
+
+        // 辅助函数：根据等级获取官职
+        function getOfficialRank(level) {
+            if (level < 5) return "布衣";
+            if (level < 10) return "县令";
+            if (level < 15) return "郡守";
+            if (level < 20) return "刺史";
+            if (level < 25) return "州牧";
+            if (level < 30) return "大将军";
+            if (level < 35) return "丞相";
+            return "天子"; // 最高等级
+        }
+
+        // 添加日志
+        function addLog(entry) {
+            gameState.adventureLog.push(`回合 ${gameState.turn + 1}: ${entry}`);
+            // 限制日志条数，例如只保留最新50条
+            if (gameState.adventureLog.length > 50) {
+                gameState.adventureLog.splice(0, gameState.adventureLog.length - 50);
+            }
+            updateUI(); // 实时更新日志
+        }
+
+        // 显示加载动画
+        function showLoading(message) {
+            loadingText.textContent = message;
+            loadingOverlay.classList.add('visible');
+        }
+
+        // 隐藏加载动画
+        function hideLoading() {
+            loadingOverlay.classList.remove('visible');
+        }
+
+        // 更新选项
+        function updateChoices(choices) {
+            choicesContainer.innerHTML = '';
+            if (choices && choices.length > 0) {
+                choices.forEach(choice => {
+                    const button = document.createElement('button');
+                    button.className = 'choice-btn';
+                    button.textContent = choice.text;
+                    button.onclick = () => handleChoice(choice.target, choice.text);
+                    choicesContainer.appendChild(button);
+                });
+            } else {
+                // 如果没有更多选项，提供一个重新开始的按钮
+                storyText.textContent += "\n\n乱世无常，前路已断。";
+                const restartBtn = document.createElement('button');
+                restartBtn.className = 'choice-btn';
+                restartBtn.textContent = '🔄 重新开始';
+                restartBtn.onclick = resetGame;
+                choicesContainer.appendChild(restartBtn);
+                choicesContainer.style.gridTemplateColumns = '1fr';
+            }
+        }
+
+        // 解锁成就
+        function unlockAchievement(id) {
+            const achievement = gameState.achievements.find(ach => ach.id === id);
+            if (achievement && !achievement.unlocked) {
+                achievement.unlocked = true;
+                addLog(`恭喜！解锁成就：${achievement.text}`);
                 updateUI();
-                console.log('游戏状态已加载，保存时间:', parsed.saveTime);
-                return true;
+            }
+        }
+
+        // 应用AI生成的效果
+        function applyEffects(effects) {
+            if (!effects) return;
+            for (const key in effects) {
+                if (gameState.hasOwnProperty(key)) {
+                    if (key === 'health') {
+                        gameState.health = Math.max(0, Math.min(gameState.maxHealth, gameState.health + effects[key]));
+                        addLog(`兵力${effects[key] > 0 ? '增加' : '减少'}了 ${Math.abs(effects[key])}。`);
+                    } else if (key === 'maxHealth') {
+                        gameState.maxHealth += effects[key];
+                        addLog(`最大兵力上限${effects[key] > 0 ? '提升' : '降低'}了 ${Math.abs(effects[key])}。`);
+                    }
+                    else if (key === 'items' && Array.isArray(effects[key])) {
+                        effects[key].forEach(newItem => {
+                            const existingItem = gameState.items.find(item => item.name === newItem.name);
+                            if (existingItem) {
+                                existingItem.quantity = (existingItem.quantity || 1) + (newItem.quantity || 1);
+                                addLog(`获得了 ${newItem.quantity || 1} 单位的 ${newItem.name}。`);
+                            } else {
+                                gameState.items.push({ name: newItem.name, quantity: newItem.quantity || 1 });
+                                addLog(`获得了物品：${newItem.name}。`);
+                            }
+                        });
+                    } else if (key === 'skills' && Array.isArray(effects[key])) {
+                        effects[key].forEach(newSkill => {
+                            if (!gameState.skills.some(s => s.name === newSkill.name)) {
+                                gameState.skills.push(newSkill);
+                                addLog(`学会了新的将领/策略：${newSkill.name}。`);
+                                unlockAchievement('first_skill'); // 学习新技能成就
+                            }
+                        });
+                    } else if (key === 'achievements' && Array.isArray(effects[key])) {
+                        effects[key].forEach(achId => unlockAchievement(achId));
+                    } else if (key === 'level') { // 官职提升
+                        gameState.level += effects[key];
+                        addLog(`你的官职提升了！现在是：${getOfficialRank(gameState.level)}。`);
+                    } else if (key === 'food') { // 粮草增减
+                        gameState.food = Math.max(0, gameState.food + effects[key]);
+                        addLog(`粮草${effects[key] > 0 ? '增加' : '减少'}了 ${Math.abs(effects[key])}。`);
+                    }
+                    else {
+                        gameState[key] += effects[key];
+                        // 针对不同的属性提供更具体的日志
+                        if (key === 'coins') addLog(`金钱${effects[key] > 0 ? '增加' : '减少'}了 ${Math.abs(effects[key])}。`);
+                        else if (key === 'reputation') addLog(`声望${effects[key] > 0 ? '提升' : '下降'}了 ${Math.abs(effects[key])}。`);
+                        else if (key === 'attack') addLog(`武力${effects[key] > 0 ? '提升' : '下降'}了 ${Math.abs(effects[key])}。`);
+                        else if (key === 'defense') addLog(`统率${effects[key] > 0 ? '提升' : '下降'}了 ${Math.abs(effects[key])}。`);
+                        else if (key === 'agility') addLog(`智力${effects[key] > 0 ? '提升' : '下降'}了 ${Math.abs(effects[key])}。`);
+                        else if (key === 'charm') addLog(`政治${effects[key] > 0 ? '提升' : '下降'}了 ${Math.abs(effects[key])}。`);
+                    }
+                }
+            }
+            // 检查兵力是否为0，如果是则游戏结束
+            if (gameState.health <= 0) {
+                storyText.textContent = "兵败如山倒，你麾下将士所剩无几，霸业之路戛然而止。";
+                choicesContainer.innerHTML = '';
+                const restartBtn = document.createElement('button');
+                restartBtn.className = 'choice-btn';
+                restartBtn.textContent = '🔄 重新开始';
+                restartBtn.onclick = resetGame;
+                choicesContainer.appendChild(restartBtn);
+                choicesContainer.style.gridTemplateColumns = '1fr';
+                addLog("你的霸业已终结。");
+                unlockAchievement('game_over'); // 可以添加一个“游戏结束”的成就
+            }
+        }
+
+
+        // 处理玩家选择
+        async function handleChoice(choice, choiceText) {
+            showLoading('正在分析乱世局势...'); // 加载提示
+            addLog(`选择了：${choiceText}`); // 添加到日志
+
+            let prompt = "";
+            let imagePrompt = ""; // 用于初始选择的特定图片提示
+
+            // 处理初始选择
+            if (gameState.currentScene === "start") {
+                let initialStoryPrompt = "";
+                switch (choice) {
+                    case "humble_villager":
+                        gameState.charName = "刘" + String.fromCharCode(0x4E00 + Math.floor(Math.random() * 20000)); // 随机化一个汉字作为名字
+                        gameState.attack += 5; gameState.defense += 10; gameState.coins += 100; gameState.food += 500;
+                        initialStoryPrompt = `你作为一名布衣平民，在乱世中艰难求生，但胸怀大志。你接下来会如何行动？提供一个关于你初入乱世的故事开端，并给出2-3个行动选项。`;
+                        imagePrompt = "A humble villager in a war-torn Chinese village, ink wash painting style, Three Kingdoms era";
+                        break;
+                    case "exiled_noble":
+                        gameState.charName = "袁" + String.fromCharCode(0x4E00 + Math.floor(Math.random() * 20000));
+                        gameState.charm += 10; gameState.coins += 500; gameState.reputation += 20;
+                        initialStoryPrompt = `你曾是显赫贵族之后，家族衰落后你流落民间，但仍有一定影响力。你接下来会如何行动？提供一个关于你如何在乱世中重振家族声威的故事开端，并给出2-3个行动选项。`;
+                        imagePrompt = "An exiled Chinese noble in simple clothes, but with a dignified demeanor, Three Kingdoms era";
+                        break;
+                    case "loyal_retainer":
+                        gameState.charName = "赵" + String.fromCharCode(0x4E00 + Math.floor(Math.random() * 20000));
+                        gameState.attack += 15; gameState.defense += 5; gameState.health += 200; gameState.maxHealth += 200;
+                        initialStoryPrompt = `你是一名忠义之士，渴望在乱世中寻觅明主，报效国家。你接下来会如何行动？提供一个关于你初次展现武勇，寻访明主的故事开端，并给出2-3个行动选项。`;
+                        imagePrompt = "A loyal Chinese warrior, armed with a spear, standing firm amidst chaos, Three Kingdoms era";
+                        break;
+                    case "cunning_strategist":
+                        gameState.charName = "诸葛" + String.fromCharCode(0x4E00 + Math.floor(Math.random() * 20000));
+                        gameState.agility += 15; gameState.charm += 5; gameState.reputation += 10;
+                        initialStoryPrompt = `你是一名隐居深山的谋士，洞察天下大势，等待时机。你接下来会如何行动？提供一个关于你如何出山辅佐明主，或独自施展智谋的故事开端，并给出2-3个行动选项。`;
+                        imagePrompt = "A reclusive Chinese strategist in a bamboo forest, with a feather fan, Three Kingdoms era";
+                        break;
+                }
+                prompt = `你现在是《三国志：乱世争雄》的AI游戏引擎，你的任务是根据玩家的选择，生成引人入胜、符合三国历史背景（或演义设定）的故事情节和合理的行动选项。请确保回复是有效的JSON格式。
+                
+                当前玩家角色是【${gameState.charName}】，出身为【${choiceText}】。
+                你选择${choiceText}，${initialStoryPrompt} 
+                
+                请提供一个JSON对象，包含以下字段：
+                - "story": 描述当前场景和故事进展的文字。
+                - "choices": 一个包含2-4个行动选项的数组，每个选项应包含"text"（选项文本）和"target"（该选项的内部标识符）。
+                - "imagePrompt" (可选): 用于生成当前场景图片（三国风格）的英文提示词。
+                - "effects" (可选): 一个对象，包含对游戏状态的修改（如{"coins": 100, "attack": 5, "items": [{"name": "青囊书", "quantity": 1}], "achievements": ["recruit_general"]}）。可修改的属性包括：health, maxHealth, attack, defense, agility, charm, coins, food, reputation, level, skills, items, achievements。
+                `;
+                gameState.currentScene = choice; // 更新当前场景
+                unlockAchievement('first_choice'); // 解锁成就
+            } else {
+                // 后续回合的AI提示词
+                prompt = `你现在是《三国志：乱世争雄》的AI游戏引擎，你的任务是根据玩家的选择，生成引人入胜、符合三国历史背景（或演义设定）的故事情节和合理的行动选项。请确保回复是有效的JSON格式。
+                
+                当前玩家角色是【${gameState.charName}】，身份是【${getOfficialRank(gameState.level)}】。
+                你拥有的属性：武力${gameState.attack}，统率${gameState.defense}，智力${gameState.agility}，政治${gameState.charm}。
+                金钱：${gameState.coins}，粮草：${gameState.food}，兵力：${gameState.health}/${gameState.maxHealth}。
+                声望：${gameState.reputation}。
+                你目前的将领和策略有：${gameState.skills.map(s => s.name).join('，') || '无' }。
+                你最近经历了：“${storyText.textContent.substring(0, Math.min(storyText.textContent.length, 200))}...”。
+                你选择了“${choiceText}”。
+                
+                请根据这个选择和当前游戏状态，生成接下来的三国故事内容，并给出2-3个新的行动选项。着重强调三国时期的政治斗争、军事冲突、人物互动、内政发展、奇遇、招募将领、攻城略地等元素。
+                
+                请提供一个JSON对象，包含以下字段：
+                - "story": 描述当前场景和故事进展的文字。
+                - "choices": 一个包含2-4个行动选项的数组，每个选项应包含"text"（选项文本）和"target"（该选项的内部标识符）。
+                - "imagePrompt" (可选): 用于生成当前场景图片（三国风格）的英文提示词。
+                - "effects" (可选): 一个对象，包含对游戏状态的修改（如{"coins": 100, "attack": 5, "items": [{"name": "青囊书", "quantity": 1}], "achievements": ["recruit_general"]}）。可修改的属性包括：health, maxHealth, attack, defense, agility, charm, coins, food, reputation, level, skills, items, achievements。
+                `;
+            }
+
+            try {
+                const result = await promptLLM(prompt, "三国故事生成"); // 传递一个描述性的任务名
+                if (result && result.story) {
+                    storyText.textContent = result.story;
+                    updateChoices(result.choices);
+
+                    // 优先使用AI生成的imagePrompt，否则使用初始选择的imagePrompt
+                    if (result.imagePrompt) {
+                        await generateImage(result.imagePrompt, "三国场景图片");
+                    } else if (imagePrompt) { // 如果初始选择有特定图片提示
+                        await generateImage(imagePrompt, "三国人物图片");
+                    } else {
+                        // 如果AI没有提供，且没有初始图片提示，可以尝试根据故事内容生成一个通用图片提示
+                        await generateImage("An atmospheric scene from the Three Kingdoms era, illustrating the story: " + result.story.substring(0, Math.min(result.story.length, 50)), "三国场景图片");
+                    }
+
+                    // 应用效果
+                    if (result.effects) {
+                        applyEffects(result.effects);
+                    }
+                    addLog(result.story); // 将新故事添加到日志
+                    gameState.turn++; // 增加回合数
+                    updateUI();
+                } else {
+                    console.error("AI生成结果无效:", result);
+                    storyText.textContent = "似乎发生了时空错乱，请重新选择或重置游戏。";
+                    updateChoices([{ text: "重置游戏", target: "reset" }]);
+                }
             } catch (error) {
-                console.error('加载游戏状态失败:', error);
-                return false;
+                console.error("处理选择时发生错误:", error);
+                storyText.textContent = "乱世迷雾笼罩，无法看清前路。请检查API设置或重试。";
+                updateChoices([{ text: "重置游戏", target: "reset" }]);
+            } finally {
+                hideLoading();
             }
         }
 
         // 重置游戏
         async function resetGame() {
             if (confirm('确定要重置游戏吗？这将清除所有进度，无法恢复！')) {
-                // 清除保存的游戏状态
-                localStorage.removeItem('cultivationGameSave');
-                
+                localStorage.removeItem('sanguoGameSave'); // 更改保存名称
                 // 重置游戏状态到初始值
-                gameState.faction = null;
-                gameState.health = 100;
-                gameState.maxHealth = 100;
-                gameState.attack = 5;
-                gameState.defense = 5;
-                gameState.agility = 5;
-                gameState.charm = 5;
-                gameState.coins = 50;
-                gameState.reputation = 0;
-                gameState.level = 1;
-                gameState.skills = [];
-                gameState.items = [];
-                gameState.achievements.forEach(ach => ach.unlocked = false);
-                gameState.adventureLog = [];
-                gameState.turn = 0;
-                gameState.currentScene = "start";
-                
+                gameState = {
+                    charName: "无名主公",
+                    faction: null,
+                    health: 1000,
+                    maxHealth: 1000,
+                    attack: 60,
+                    defense: 60,
+                    agility: 60,
+                    charm: 60,
+                    coins: 500,
+                    food: 1000,
+                    reputation: 0,
+                    level: 1,
+                    skills: [
+                        { name: "基础步法", description: "简单的步兵操练，提高部队纪律性", icon: "fa-solid fa-person-military-rifle" },
+                        { name: "市井情报", description: "通过市井传闻获取基本信息", icon: "fa-solid fa-magnifying-glass" }
+                    ],
+                    items: [],
+                    achievements: gameState.achievements.map(ach => ({ ...ach, unlocked: false })), // 重置所有成就为未解锁
+                    adventureLog: [],
+                    turn: 0,
+                    currentScene: "start"
+                };
+
                 // 重置界面到初始状态
-                storyText.textContent = '你从一个悠长的梦境中惊醒，梦里是霓虹闪烁的钢铁森林，是未曾听闻的喧嚣与繁华。但眼前，却是古朴的木屋、摇曳的烛火。窗外，月华如水，仙鹤长鸣，远方山峦在云雾中若隐若现。你意识到，你来到了一个名为"云渺大陆"的修仙世界。在这里，凡人亦可凭借机缘与毅力，感悟天地，逆天改命，踏上追寻永恒的道路。一个神秘的声音在你脑海中回响："此乃天命所归，亦是汝之抉择。选择你的起点，织就你的传奇吧。"';
-                
-                // 重置选择按钮
+                storyText.textContent = '你从一场混沌的梦境中醒来，耳边是刀剑碰撞的喧嚣与百姓的哀嚎。你意识到，你并非身处于太平盛世，而是来到了一个战火纷飞的年代——东汉末年，群雄并起的三国乱世。在这里，天下分崩离析，民不聊生，而你，将如何在这乱世中立足，成就一番霸业？一个声音在你心中回荡：“此乃天命所归，亦是汝之抉择。选择你的出身，开启你的乱世征途吧。”';
                 choicesContainer.innerHTML = `
-                    <button class="choice-btn" data-choice="orphan">📜 孤儿出身，身世成谜</button>
-                    <button class="choice-btn" data-choice="farmer">🌾 农家子弟，淳朴坚毅</button>
-                    <button class="choice-btn" data-choice="scholar">📚 书香门第，聪慧过人</button>
-                    <button class="choice-btn" data-choice="merchant">💰 商贾之后，精于计算</button>
+                    <button class="choice-btn" data-choice="humble_villager">🏡 布衣出身，胸怀天下</button>
+                    <button class="choice-btn" data-choice="exiled_noble">👑 落魄贵族，旧日余晖</button>
+                    <button class="choice-btn" data-choice="loyal_retainer">⚔️ 忠义之士，为国效力</button>
+                    <button class="choice-btn" data-choice="cunning_strategist">💡 隐居谋士，智定乾坤</button>
                 `;
-                
-                // 重置场景图片
-                const initialImagePrompt = "A vast and mystical Chinese cultivation world, with towering mountains shrouded in mist, a majestic sword sect, a dark shadowy demonic sect, and a tranquil alchemist's pavilion, ink wash painting style";
+                // 重置场景图片为三国主题的初始图片
+                const initialImagePrompt = "A panoramic view of ancient China during the Three Kingdoms period, with distant mountains, a river, and smoke rising from a battlefield, in a traditional Chinese ink painting style.";
                 try {
-                    await generateImage(initialImagePrompt);
+                    await generateImage(initialImagePrompt, "三国乱世初始场景"); // 增加任务描述
                 } catch (error) {
                     console.error("重置时图片加载失败:", error);
                 }
-                
                 updateUI();
                 alert('游戏已重置！');
+                addLog("游戏已重置，新的征程开始！");
             }
         }
 
-        // 初始化
-        document.addEventListener('DOMContentLoaded', async () => {
-            apiUrlInput.value = localStorage.getItem('customApiUrl') || '';
-            apiKeyInput.value = localStorage.getItem('customApiKey') || '';
-            
-            await fetchModels();
-            
-            choicesContainer.addEventListener('click', (e) => {
-                if (e.target.tagName === 'BUTTON' || e.target.closest('button')) {
-                    const button = e.target.closest('button');
-                    handleChoice(button.dataset.choice, button.textContent.trim());
-                }
-            });
-
-            saveApiBtn.addEventListener('click', saveApiSettings);
-            clearApiBtn.addEventListener('click', clearApiSettings);
-            
-            // 游戏控制按钮事件
-            document.getElementById('reset-game-btn').addEventListener('click', resetGame);
-            
-            // 检查是否是本地文件访问
-            const isLocalFile = window.location.protocol === 'file:';
-            
-            // 更新API设置提示文本
-            const apiHint = document.getElementById('api-settings-hint');
-            if (isLocalFile) {
-                apiHint.innerHTML = '⚠️ <strong>本地文件访问模式</strong>：必须配置自定义API才能使用游戏功能。<br>请填写您的AI API信息（配置仅存于浏览器本地，安全可靠）：';
-                apiHint.style.color = '#ff6b6b';
-                // 更新占位符文本
-                apiUrlInput.placeholder = 'API URL (必填，如: https://api.openai.com/v1)';
-                apiKeyInput.placeholder = 'API Key (必填)';
-            }
-            
-            // 尝试加载保存的游戏状态
-            const hasLoadedSave = loadGameState();
-            
-            if (!hasLoadedSave) {
-                // 如果没有保存的状态，显示初始场景
-                if (!isLocalFile) {
-                    showLoading(true);
-                }
-                const initialImagePrompt = "A vast and mystical Chinese cultivation world, with towering mountains shrouded in mist, a majestic sword sect, a dark shadowy demonic sect, and a tranquil alchemist's pavilion, ink wash painting style";
-                try {
-                    await generateImage(initialImagePrompt);
-                } catch (error) {
-                    console.error("初始图片加载失败:", error);
-                }
-            } else {
-                // 如果加载了保存的状态，但没有场景图片，则生成初始图片
-                if (!sceneImg.src || sceneImg.src === window.location.href || sceneImg.src.includes('file://')) {
-                    const initialImagePrompt = "A vast and mystical Chinese cultivation world, with towering mountains shrouded in mist, a majestic sword sect, a dark shadowy demonic sect, and a tranquil alchemist's pavilion, ink wash painting style";
-                    try {
-                        await generateImage(initialImagePrompt);
-                    } catch (error) {
-                        console.error("初始图片加载失败:", error);
+        // 页面加载完成时执行
+        document.addEventListener('DOMContentLoaded', () => {
+            loadGameState();
+            // 为初始按钮添加事件监听器
+            choicesContainer.addEventListener('click', (event) => {
+                if (event.target.classList.contains('choice-btn')) {
+                    const choice = event.target.dataset.choice;
+                    const choiceText = event.target.textContent;
+                    // 确保只有在当前场景是"start"时才允许初始选择
+                    if (gameState.currentScene === "start" || choice === "reset") { // 允许重置
+                        handleChoice(choice, choiceText);
                     }
                 }
-            }
-            
-            updateUI();
+            });
         });
-
-        // 加载场景 - 现在完全由AI驱动
-        async function loadScene(sceneKey, playerChoiceText = null) {
-            showLoading(true);
-            
-            try {
-                const scene = await generateAdventure(sceneKey, playerChoiceText);
-                if (!scene) {
-                    throw new Error('AI未能生成有效场景');
-                }
-
-                // 在状态更新后检查游戏是否结束
-                if (gameState.health <= 0) {
-                    updateUI(); // 最后一次更新UI以显示0 HP
-                    storyText.textContent = scene.text + "\n\n你的气息逐渐微弱，眼前一黑，意识沉入了无尽的黑暗... 你的冒险结束了。";
-                    choicesContainer.innerHTML = '';
-                    const restartBtn = document.createElement('button');
-                    restartBtn.className = 'choice-btn';
-                    restartBtn.textContent = '🔄 重新开始';
-                    restartBtn.onclick = resetGame;
-                    choicesContainer.appendChild(restartBtn);
-                    choicesContainer.style.gridTemplateColumns = '1fr';
-                    showLoading(false);
-                    saveGameState(); // 保存游戏结束的状态
-                    return;
-                }
-
-                gameState.currentScene = sceneKey;
-                storyText.textContent = scene.text;
-                renderChoices(scene.choices);
-                
-                // 等待图片加载完成后再保存游戏进度
-                try {
-                    await generateImage(scene.imagePrompt);
-                    // 在所有DOM更新（包括图片）完成后保存游戏进度
-                    saveGameState();
-                } catch (error) {
-                    console.error("图片生成失败，但仍保存游戏进度:", error);
-                    // 即使图片加载失败，也要保存游戏进度
-                    saveGameState();
-                }
-            } catch (error) {
-                console.error("冒险生成失败的详细错误:", error);
-                showLoading(false);
-                
-                let errorMessage = error instanceof Error ? error.message : JSON.stringify(error);
-                
-                // 根据错误类型提供不同的提示
-                if (errorMessage.includes('timeout') || errorMessage.includes('TIMEOUT')) {
-                    alert(`⏰ 请求超时：AI服务响应较慢，请稍后重试。\n\n建议：\n1. 检查网络连接\n2. 稍等片刻后重新选择\n3. 如持续出现，可尝试刷新页面`);
-                } else if (errorMessage.includes('API key')) {
-                    alert(`🔑 API配置错误：请检查API密钥设置。\n\n如果使用默认后端API，请联系管理员。\n如果使用自定义API，请检查API设置。`);
-                } else if (errorMessage.includes('500') || errorMessage.includes('502') || errorMessage.includes('503')) {
-                    alert(`🔧 服务器错误：AI服务暂时不可用。\n\n建议：\n1. 稍后重试\n2. 检查API服务状态\n3. 如持续出现，请联系技术支持`);
-                } else {
-                    alert(`❌ 冒险生成失败: ${errorMessage}\n\n请检查：\n1. 网络连接是否正常\n2. API设置是否正确\n3. 查看浏览器控制台获取详细信息`);
-                }
-            }
-        }
-
-        // 使用后端API生成冒险
-        async function generateAdventure(currentSceneKey, playerChoiceText) {
-            // 检查是否是本地文件访问
-            const isLocalFile = window.location.protocol === 'file:';
-            
-            // 本地文件访问时必须使用自定义API，否则优先使用后端API
-            let useCustomApi = isLocalFile || (localStorage.getItem('customApiUrl') && localStorage.getItem('customApiKey'));
-            let model = localStorage.getItem('customModel') || ''; // 空字符串表示使用后端默认模型
-            
-            // 本地访问时如果没有配置自定义API，提示用户
-            if (isLocalFile && (!localStorage.getItem('customApiUrl') || !localStorage.getItem('customApiKey'))) {
-                throw new Error('本地文件访问模式需要配置自定义API。请在页面下方的"API设置"中填写您的API URL和密钥。');
-            }
-            
-            const previousSceneText = storyText.textContent;
-            
-            const prompt = `你是一位顶级的修仙世界叙事大师，负责动态生成一个连贯、有趣且节奏合理的修仙故事。
-
-**循环打破机制 (LOOP BREAKER) - 最高优先级规则:**
-1.  **分析日志:** 查看最新的5条冒险日志。
-2.  **识别循环:** 如果日志反复描述同一事件（例如：与同一个敌人战斗、在同一个地方探索），则必须打破循环。
-3.  **强制结束:** 在当前回合，必须结束这个循环事件。
-    *   **战斗循环:** 敌人必须被击败、逃跑、或被意外事件终结。
-    *   **探索循环:** 必须有重大发现、或找到出口、或遇到无法绕过的障碍。
-4.  **提供新选择:** 提供的选择必须是事件结束后的行动（如“搜刮战利品”、“离开此地”），绝对不能是继续循环的选项（如“继续攻击”）。
-
-**核心原则:**
-1.  **事件驱动叙事:** 专注于描述具体发生的事件、人物对话和环境变化。
-2.  **剧情深度优先:** 优先深化当前事件和已有角色关系，而不是轻易引入新角色。
-3.  **自然整合:** 将玩家的技能(${gameState.skills.map(s => s.name).join('、') || '无'})和物品自然地融入事件描述和选择中。
-4.  **结尾即悬念:** 剧情必须在事件的关键转折点或高潮时停止。
-
-**剧情节奏控制:**
-1.  **感知回合:** 当前是游戏第 ${gameState.turn} 回合。
-2.  **避免拖沓:** 一个核心事件不应持续超过10个回合。
-
-**绝对禁止:**
-1.  任何形式的引导性结尾（如："你该怎么办？"）。
-2.  总结性或说教性语句（如："这是一个艰难的决定"）。
-
-**玩家状态:**
-- **境界:** 等级 ${gameState.level}
-- **状态:** 生命 ${gameState.health}/${gameState.maxHealth}，灵石 ${gameState.coins}，声望 ${gameState.reputation}
-- **当前回合:** ${gameState.turn}
-
-**剧情上下文:**
-- **最近的日志:** ${gameState.adventureLog.slice(-5).map(log => `回合 ${log.turn}: ${log.entry}`).join('; ') || '无'}
-- **前情提要:** "${previousSceneText.slice(-250)}"
-- **玩家的行动:** "${playerChoiceText}"
-
-**输出规范 (严格遵守JSON格式，所有数值必须是数字):**
-{
-  "text": "纯粹的事件描述(150-300字)。结尾必须是一个具体的高潮或转折画面，没有任何引导语。",
-  "imagePrompt": "Chinese ink painting, [与'text'内容高度相关的具体场景、人物、动作关键词]",
-  "choices": [
-    {"text": "符合当前情景的行动1", "target": "action_1"},
-    {"text": "基于玩家技能或物品的行动2", "target": "action_2"},
-    {"text": "可能改变当前局势的冒险行动3", "target": "action_3"}
-  ],
-  "gameStateUpdates": {
-    "health": -10,
-    "coins": 50,
-    "reputation": 1,
-    "level": 0
-  },
-  "itemUpdates": {"add": ["获得的物品名"], "remove": ["消耗的物品ID"]},
-  "unlockAchievements": ["需要解锁的成就ID"],
-  "logEntry": "对本次事件的高度概括（20字以内）"
-}`;
-
-            let response;
-            
-            if (useCustomApi) {
-                // 使用用户自定义的API设置
-                const apiUrl = localStorage.getItem('customApiUrl');
-                const apiKey = localStorage.getItem('customApiKey');
-                const finalApiUrl = apiUrl.trim() + '/chat/completions';
-
-                response = await fetch(finalApiUrl, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
-                    body: JSON.stringify({
-                        model: model,
-                        messages: [{ role: 'user', content: prompt }],
-                        response_format: { type: "json_object" }
-                    })
-                });
-            } else {
-                // 使用后端API（安全）
-                response = await fetch('/api/chat', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        prompt: prompt,
-                        model: model
-                    })
-                });
-            }
-
-            if (!response.ok) {
-                throw new Error(`API 请求失败: ${response.status} ${await response.text()}`);
-            }
-
-            const data = await response.json();
-            console.log("API返回的原始数据:", data);
-            
-            // 添加详细的调试信息
-            if (data.usage) {
-                console.log("Token使用情况:", data.usage);
-                if (data.usage.completion_tokens >= 3900) {
-                    console.warn("警告：响应接近token限制，可能被截断");
-                }
-            }
-            
-            if (!data.choices || !data.choices[0] || !data.choices[0].message) {
-                throw new Error('API返回数据格式错误：缺少choices或message字段');
-            }
-            
-            let contentString = data.choices[0].message.content;
-            console.log("AI返回的原始内容:", contentString);
-            
-            if (!contentString || contentString.trim() === '') {
-                throw new Error('AI返回的内容为空');
-            }
-            
-            // 尝试提取JSON代码块
-            const match = contentString.match(/```json\s*([\s\S]*?)\s*```/);
-            if (match) {
-                contentString = match[1];
-                console.log("提取的JSON内容:", contentString);
-            }
-
-            // 尝试修复不完整的JSON
-            function tryFixIncompleteJson(jsonStr) {
-                jsonStr = jsonStr.trim();
-                
-                // 尝试找到最后一个有效的JSON字符（'}' 或 ']' 或 '"'）
-                const lastBrace = jsonStr.lastIndexOf('}');
-                const lastBracket = jsonStr.lastIndexOf(']');
-                const lastQuote = jsonStr.lastIndexOf('"');
-                const lastNumber = jsonStr.search(/[0-9]\s*$/);
-
-                const lastValidCharIndex = Math.max(lastBrace, lastBracket, lastQuote, lastNumber);
-
-                // 如果字符串在最后一个有效字符后还有内容，说明可能被截断了
-                if (lastValidCharIndex !== -1 && lastValidCharIndex < jsonStr.length - 1) {
-                    // 截断到最后一个有效字符
-                    jsonStr = jsonStr.substring(0, lastValidCharIndex + 1);
-                }
-                
-                // 重新计算括号和花括号的配平
-                let openBraces = (jsonStr.match(/{/g) || []).length;
-                let closeBraces = (jsonStr.match(/}/g) || []).length;
-                let openBrackets = (jsonStr.match(/\[/g) || []).length;
-                let closeBrackets = (jsonStr.match(/\]/g) || []).length;
-
-                // 闭合未闭合的括号
-                while (openBrackets > closeBrackets) {
-                    jsonStr += ']';
-                    closeBrackets++;
-                }
-                
-                // 闭合未闭合的花括号
-                while (openBraces > closeBraces) {
-                    jsonStr += '}';
-                    closeBraces++;
-                }
-
-                return jsonStr;
-            }
-
-            try {
-                let content;
-                try {
-                    content = JSON.parse(contentString);
-                } catch (firstError) {
-                    console.log("首次JSON解析失败，尝试修复:", firstError.message);
-                    const fixedJsonString = tryFixIncompleteJson(contentString);
-                    console.log("修复后的JSON:", fixedJsonString);
-                    content = JSON.parse(fixedJsonString);
-                    console.log("修复成功！");
-                }
-                console.log("解析成功的content:", JSON.stringify(content, null, 2));
-                
-                // 验证必需字段
-                if (!content.text) {
-                    console.warn("警告：缺少text字段，使用默认值");
-                    content.text = "你继续在这个神秘的世界中探索...";
-                }
-                if (!content.imagePrompt) {
-                    console.warn("警告：缺少imagePrompt字段，使用默认值");
-                    content.imagePrompt = "A mystical Chinese cultivation world scene";
-                }
-                if (!content.choices || !Array.isArray(content.choices)) {
-                    console.warn("警告：缺少choices字段，使用默认值");
-                    content.choices = [
-                        { text: "继续探索", target: "continue" },
-                        { text: "休息片刻", target: "rest" }
-                    ];
-                }
-                if (!content.gameStateUpdates) {
-                    content.gameStateUpdates = {};
-                }
-                if (!content.itemUpdates) {
-                    content.itemUpdates = { add: [], remove: [] };
-                }
-                if (!content.unlockAchievements) {
-                    content.unlockAchievements = [];
-                }
-                if (!content.logEntry) {
-                    content.logEntry = "继续冒险...";
-                }
-
-                if (content.gameStateUpdates) {
-                    const updates = content.gameStateUpdates;
-                    ['health', 'maxHealth', 'attack', 'defense', 'agility', 'charm', 'coins', 'reputation', 'level'].forEach(key => {
-                        if (updates[key] !== undefined && typeof gameState[key] === 'number') {
-                            gameState[key] += Number(updates[key]);
-                        }
-                    });
-                    if (gameState.health < 0) gameState.health = 0;
-                    if (gameState.health > gameState.maxHealth) gameState.health = gameState.maxHealth;
-                    
-                    if (updates.skills && Array.isArray(updates.skills)) {
-                        updates.skills.forEach(skillName => {
-                            if (!gameState.skills.find(s => s.name === skillName)) {
-                                gameState.skills.push({
-                                    name: skillName,
-                                    description: "冒险中习得的技能",
-                                    icon: "fa-solid fa-star"
-                                });
-                            }
-                        });
-                    }
-                }
-
-                if (content.itemUpdates) {
-                    if (content.itemUpdates.add && Array.isArray(content.itemUpdates.add)) {
-                        content.itemUpdates.add.forEach(newItemName => {
-                            if (typeof newItemName === 'string') {
-                                gameState.items.push({ id: newItemName.toLowerCase().replace(/\s/g, '_'), name: newItemName });
-                            }
-                        });
-                    }
-                    if (content.itemUpdates.remove) {
-                        content.itemUpdates.remove.forEach(itemIdToRemove => {
-                            gameState.items = gameState.items.filter(item => item.id !== itemIdToRemove);
-                        });
-                    }
-                }
-
-                if (content.unlockAchievements && Array.isArray(content.unlockAchievements)) {
-                    content.unlockAchievements.forEach(achIdToUnlock => {
-                        const achievement = gameState.achievements.find(a => a.id === achIdToUnlock);
-                        if (achievement && !achievement.unlocked) {
-                            achievement.unlocked = true;
-                        }
-                    });
-                }
-                
-                // 自动检查技能相关成就
-                const skillCount = gameState.skills.length;
-                if (skillCount >= 1) {
-                    const firstSkillAch = gameState.achievements.find(a => a.id === 'first_skill');
-                    if (firstSkillAch && !firstSkillAch.unlocked) {
-                        firstSkillAch.unlocked = true;
-                        console.log("解锁成就: 初窥门径");
-                    }
-                }
-                if (skillCount >= 5) {
-                    const skillMasterAch = gameState.achievements.find(a => a.id === 'skill_master');
-                    if (skillMasterAch && !skillMasterAch.unlocked) {
-                        skillMasterAch.unlocked = true;
-                        console.log("解锁成就: 技艺精湛");
-                    }
-                }
-                
-                // 检查法术类技能数量
-                const spellSkills = gameState.skills.filter(skill =>
-                    skill.name.includes('术') || skill.name.includes('法') || skill.name.includes('咒')
-                );
-                if (spellSkills.length >= 3) {
-                    const spellCasterAch = gameState.achievements.find(a => a.id === 'spell_caster');
-                    if (spellCasterAch && !spellCasterAch.unlocked) {
-                        spellCasterAch.unlocked = true;
-                        console.log("解锁成就: 法术大师");
-                    }
-                }
-                
-                if(content.logEntry && typeof content.logEntry === 'string') {
-                    gameState.turn++;
-                    gameState.adventureLog.push({ turn: gameState.turn, entry: content.logEntry });
-                }
-
-                updateUI();
-                
-                return content;
-            } catch (e) {
-                console.error("JSON解析失败:", e);
-                console.error("尝试解析的内容:", contentString);
-                
-                // 尝试从原始内容中提取文本信息
-                let extractedText = "抱歉，AI响应解析失败。你发现自己站在一个神秘的地方，周围云雾缭绕，似乎有无数的可能性等待着你去探索。";
-                
-                // 尝试从截断的JSON中提取text字段
-                const textMatch = contentString.match(/"text":\s*"([^"]*(?:\\.[^"]*)*)/);
-                if (textMatch && textMatch[1]) {
-                    extractedText = textMatch[1].replace(/\\"/g, '"').replace(/\n/g, '\n');
-                    console.log("从截断的JSON中提取到文本:", extractedText);
-                }
-                
-                // 如果JSON解析失败，生成一个智能的fallback响应
-                const fallbackContent = {
-                    text: extractedText,
-                    imagePrompt: "A mystical Chinese cultivation world with swirling mists and ancient mountains, ink wash painting style",
-                    choices: [
-                        { text: "🔄 重新尝试", target: "retry" },
-                        { text: "🏠 返回起点", target: "start" },
-                        { text: "继续探索", target: "continue" }
-                    ],
-                    gameStateUpdates: {},
-                    itemUpdates: { add: [], remove: [] },
-                    unlockAchievements: [],
-                    logEntry: "遇到了一些技术问题，但冒险仍在继续..."
-                };
-                
-                console.log("使用备用响应:", fallbackContent);
-                return fallbackContent;
-            }
-        }
-
-        async function generateImage(prompt) {
-            return new Promise(async (resolve, reject) => {
-                try {
-                    sceneImg.style.opacity = 0.5;
-                    
-                    // 检查是否是本地文件访问
-                    const isLocalFile = window.location.protocol === 'file:';
-                    let imageUrl;
-                    
-                    if (isLocalFile) {
-                        // 本地文件访问时直接使用pollinations API
-                        imageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?nologo=true&width=800&height=600&model=flux`;
-                    } else {
-                        // 通过后端API生成图片
-                        const response = await fetch('/api/image', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify({
-                                prompt: prompt,
-                                width: 800,
-                                height: 600,
-                                nologo: true,
-                                model: 'flux'
-                            })
-                        });
-                        
-                        if (!response.ok) {
-                            throw new Error(`图片生成API请求失败: ${response.status}`);
-                        }
-                        
-                        const data = await response.json();
-                        if (!data.success || !data.imageUrl) {
-                            throw new Error('图片生成失败');
-                        }
-                        
-                        imageUrl = data.imageUrl;
-                        console.log('图片生成成功:', data);
-                    }
-                    
-                    // 预加载图片
-                    const img = new Image();
-                    img.crossOrigin = 'anonymous';
-                    
-                    img.onload = () => {
-                        sceneImg.src = imageUrl;
-                        sceneImg.style.opacity = 1;
-                        showLoading(false);
-                        resolve(imageUrl);
-                    };
-                    
-                    img.onerror = () => {
-                        console.error("图片加载失败，使用备用图片");
-                        // 使用备用图片URL
-                        const fallbackUrl = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAwIiBoZWlnaHQ9IjYwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjMWExYTJlIi8+CiAgPHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIyNCIgZmlsbD0iIzRlY2RjNCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPuS/ruS7meS4lueVjO+8muS6kea4uuS7meWcnzwvdGV4dD4KPC9zdmc+';
-                        sceneImg.src = fallbackUrl;
-                        sceneImg.style.opacity = 1;
-                        showLoading(false);
-                        resolve(fallbackUrl);
-                    };
-                    
-                    img.src = imageUrl;
-                    
-                } catch (error) {
-                    console.error('图片生成错误:', error);
-                    // 使用备用图片
-                    const fallbackUrl = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAwIiBoZWlnaHQ9IjYwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjMWExYTJlIi8+CiAgPHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIyNCIgZmlsbD0iIzRlY2RjNCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPuS/ruS7meS4lueVjO+8muS6kea4uuS7meWcnzwvdGV4dD4KPC9zdmc+';
-                    sceneImg.src = fallbackUrl;
-                    sceneImg.style.opacity = 1;
-                    showLoading(false);
-                    resolve(fallbackUrl);
-                }
-            });
-        }
-        
-        function renderChoices(choices) {
-            choicesContainer.innerHTML = '';
-            if (!choices || choices.length === 0) {
-                const endButton = document.createElement('button');
-                endButton.className = 'choice-btn';
-                endButton.textContent = '本次冒险暂告一段落，刷新页面重新开始。';
-                endButton.onclick = () => window.location.reload();
-                choicesContainer.appendChild(endButton);
-                return;
-            }
-            choices.forEach(choice => {
-                const button = document.createElement('button');
-                button.className = 'choice-btn';
-                button.dataset.choice = choice.target;
-                button.textContent = choice.text;
-                choicesContainer.appendChild(button);
-            });
-        }
-        
-        function handleChoice(choiceTarget, choiceText) {
-            const firstChoiceAch = gameState.achievements.find(a => a.id === 'first_choice');
-            if (firstChoiceAch && !firstChoiceAch.unlocked) {
-                firstChoiceAch.unlocked = true;
-            }
-            loadScene(choiceTarget, choiceText);
-        }
-
-        function showLoading(show) {
-            loadingOverlay.classList.toggle('active', show);
-        }
-
-        function updateUI() {
-            if (!Array.isArray(gameState.adventureLog)) {
-                gameState.adventureLog = [];
-            }
-
-            healthBar.style.width = `${(gameState.health / gameState.maxHealth) * 100}%`;
-            healthText.textContent = `HP: ${gameState.health}/${gameState.maxHealth}`;
-            coinsEl.textContent = gameState.coins;
-            reputationEl.textContent = gameState.reputation;
-            
-            // 更新境界显示
-            if (gameState.level > 20) {
-                levelEl.textContent = '金丹';
-            } else if (gameState.level > 10) {
-                levelEl.textContent = '筑基';
-            } else if (gameState.level > 1) {
-                 levelEl.textContent = '练气';
-            } else {
-                levelEl.textContent = '凡人';
-            }
-            levelEl.title = `等级: ${gameState.level}`;
-
-
-            attackEl.textContent = gameState.attack;
-            defenseEl.textContent = gameState.defense;
-            agilityEl.textContent = gameState.agility;
-            charmEl.textContent = gameState.charm;
-
-            skillsList.innerHTML = '';
-            if (!gameState.skills || gameState.skills.length === 0) {
-                skillsList.innerHTML = '<div>尚未学习任何功法</div>';
-            } else {
-                gameState.skills.forEach(skill => {
-                    const skillItem = document.createElement('div');
-                    skillItem.className = 'skill-item';
-                    skillItem.innerHTML = `<div class="skill-name"><i class="${skill.icon || 'fa-solid fa-star'}"></i> ${skill.name}</div><div class="skill-description">${skill.description}</div>`;
-                    skillsList.appendChild(skillItem);
-                });
-            }
-            
-            itemsGrid.innerHTML = '';
-            if (!gameState.items || gameState.items.length === 0) {
-                itemsGrid.innerHTML = '<div>空空如也...</div>';
-            } else {
-                gameState.items.forEach(item => {
-                    const itemEl = document.createElement('div');
-                    itemEl.className = 'item-text';
-                    itemEl.textContent = `• ${item.name}`;
-                    itemsGrid.appendChild(itemEl);
-                });
-            }
-
-            achievementList.innerHTML = '';
-            const unlockedAchievements = gameState.achievements.filter(a => a.unlocked);
-            if (unlockedAchievements.length === 0) {
-                achievementList.innerHTML = '<div>尚未解锁</div>';
-            } else {
-                unlockedAchievements.forEach(ach => {
-                    const achEl = document.createElement('div');
-                    achEl.className = 'achievement-text';
-                    achEl.textContent = `• ${ach.text}`;
-                    achievementList.appendChild(achEl);
-                });
-            }
-            
-            adventureLogEl.innerHTML = '';
-            if (!gameState.adventureLog || gameState.adventureLog.length === 0) {
-                adventureLogEl.innerHTML = '<div>冒险尚未开始...</div>';
-            } else {
-                gameState.adventureLog.slice().reverse().forEach(log => {
-                    const logEl = document.createElement('div');
-                    logEl.className = 'log-entry';
-                    logEl.innerHTML = `<span class="log-turn">[回合 ${log.turn}]</span> ${log.entry}`;
-                    adventureLogEl.appendChild(logEl);
-                });
-            }
-        }
-        
-        async function fetchModels() {
-            const modelSelect = document.getElementById('model-input');
-            modelSelect.innerHTML = '<option value="">加载中...</option>';
-            
-            try {
-                // 检查是否是本地文件访问
-                const isLocalFile = window.location.protocol === 'file:';
-                let defaultModelName = 'DeepSeek-R1-0528';
-                
-                // 只有在非本地文件访问时才尝试获取后端配置
-                if (!isLocalFile) {
-                    try {
-                        const configResponse = await fetch('/api/config');
-                        if (configResponse.ok) {
-                            const config = await configResponse.json();
-                            defaultModelName = config.defaultModel;
-                        }
-                    } catch (e) {
-                        console.log('无法获取后端配置，使用默认值');
-                    }
-                }
-                
-                // 本地文件访问时必须使用自定义API
-                let useCustomApi = isLocalFile || (apiUrlInput.value.trim() && apiKeyInput.value.trim());
-                let response;
-                
-                if (useCustomApi && apiUrlInput.value.trim() && apiKeyInput.value.trim()) {
-                    // 使用用户自定义的API设置
-                    let apiUrl = apiUrlInput.value.trim();
-                    let apiKey = apiKeyInput.value.trim();
-
-                    if (apiUrl.endsWith('/')) apiUrl = apiUrl.slice(0, -1);
-                    const modelsUrl = `${apiUrl}/models`;
-
-                    response = await fetch(modelsUrl, {
-                        headers: {
-                            'Authorization': `Bearer ${apiKey}`
-                        }
-                    });
-                } else if (!isLocalFile) {
-                    // 使用后端API（仅在非本地文件访问时）
-                    response = await fetch('/api/models');
-                } else {
-                    // 本地文件访问但没有配置API
-                    throw new Error('本地访问需要配置自定义API');
-                }
-
-                if (!response.ok) {
-                    throw new Error(`获取模型列表失败: ${response.status}`);
-                }
-
-                const data = await response.json();
-                const models = data.data
-                    .filter(model => model.id)
-                    .sort((a, b) => a.id.localeCompare(b.id));
-
-                // 添加默认选项
-                let optionsHtml = isLocalFile ?
-                    '<option value="">请选择模型</option>' :
-                    `<option value="">使用后端默认模型 (${defaultModelName})</option>`;
-                optionsHtml += models
-                    .map(model => `<option value="${model.id}">${model.id}</option>`)
-                    .join('');
-                
-                modelSelect.innerHTML = optionsHtml;
-                
-                const savedModel = localStorage.getItem('customModel');
-                if (savedModel !== null && (savedModel === '' || models.some(m => m.id === savedModel))) {
-                    modelSelect.value = savedModel;
-                }
-            } catch (error) {
-                console.error('获取模型列表失败:', error);
-                const isLocalFile = window.location.protocol === 'file:';
-                if (isLocalFile) {
-                    modelSelect.innerHTML = '<option value="">请先配置API设置</option><option value="DeepSeek-R1-0528">DeepSeek-R1-0528</option>';
-                } else {
-                    modelSelect.innerHTML = `<option value="">使用后端默认模型 (${defaultModelName})</option><option value="DeepSeek-R1-0528">DeepSeek-R1-0528</option>`;
-                }
-            }
-        }
-
-        function saveApiSettings() {
-            localStorage.setItem('customApiUrl', apiUrlInput.value);
-            localStorage.setItem('customModel', modelInput.value);
-            localStorage.setItem('customApiKey', apiKeyInput.value);
-            fetchModels();
-            alert('API设置已保存!');
-        }
-
-        function clearApiSettings() {
-            localStorage.removeItem('customApiUrl');
-            localStorage.removeItem('customModel');
-            localStorage.removeItem('customApiKey');
-            apiUrlInput.value = '';
-            modelInput.value = '';
-            apiKeyInput.value = '';
-            alert('API设置已清除!');
-        }
     </script>
 </body>
 </html>
