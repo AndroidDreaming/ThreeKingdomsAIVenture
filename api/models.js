@@ -35,6 +35,21 @@ export default async function handler(req, res) {
       };
       return res.status(200).json(pollinationsModels);
     }
+    
+    if (apiUrl.includes('http://43.139.128.248:50112')) {
+      const customeModel = {
+        data: [
+          {
+            id: 'gemini-2.5-flash',
+            object: 'model',
+            created: Date.now(),
+            owned_by: 'pollinations'
+          }
+        ]
+      };
+      return res.status(200).json(customeModel);
+    }
+
 
     if (!apiKey) {
       return res.status(500).json({ error: 'API key not configured' });
